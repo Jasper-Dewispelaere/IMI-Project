@@ -13,6 +13,7 @@ namespace Imi.Project.Api.Core.Entities
         public string Title { get; set; }
         [Required]
         public string Image { get; set; }
+        public int ReleaseYear { get; set; }
         public Guid DirectorId { get; set; }
         public Director Director { get; set; }
         public Guid GenreId { get; set; }
