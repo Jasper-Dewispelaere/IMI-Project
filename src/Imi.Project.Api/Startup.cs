@@ -30,6 +30,8 @@ namespace Imi.Project.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddEndpointsApiExplorer();
+            services.AddSwaggerGen();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultDatabase")));
             services.AddScoped<IFilmRepository, FilmRepository>();
             services.AddScoped<IDirectorRepository, DirectorRepository>();
@@ -48,6 +50,9 @@ namespace Imi.Project.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseSwagger(); 
+            app.UseSwaggerUI();
 
             app.UseAuthorization();
 
