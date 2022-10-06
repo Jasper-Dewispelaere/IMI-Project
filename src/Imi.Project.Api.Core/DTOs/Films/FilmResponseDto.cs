@@ -11,7 +11,7 @@ namespace Imi.Project.Api.Core.DTOs.Films
 {
     public class FilmResponseDto : BaseDto
     {
-        public string Name { get; set; }
+        public string Title { get; set; }
         public string Image { get; set; }
         public int ReleaseYear { get; set; }
         public DirectorResponseDto Director { get; set; }
