@@ -1,4 +1,5 @@
-﻿using Imi.Project.Api.Core.DTOs.Directors;
+﻿using Imi.Project.Api.Core.DTOs.Actors;
+using Imi.Project.Api.Core.DTOs.Directors;
 using Imi.Project.Api.Core.DTOs.Genres;
 using System;
 using System.Collections.Generic;
