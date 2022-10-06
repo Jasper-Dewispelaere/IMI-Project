@@ -9,14 +9,14 @@ namespace Imi.Project.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FilmController : ControllerBase
+    public class FilmsController : ControllerBase
     {
         protected readonly IFilmRepository _filmRepository;
         protected readonly IDirectorRepository _directorRepository;
         protected readonly IGenreRepository _genreRepository;
         protected readonly IActorRepository _actorRepository;
 
-        public FilmController(IFilmRepository filmRepository, IDirectorRepository directorRepository, 
+        public FilmsController(IFilmRepository filmRepository, IDirectorRepository directorRepository, 
             IGenreRepository genreRepository, IActorRepository actorRepository)
         {
             _filmRepository = filmRepository;
