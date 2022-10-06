@@ -1,4 +1,6 @@
+using Imi.Project.Api.Core.Repositories.Interfaces;
 using Imi.Project.Api.Infrastructure.Data;
+using Imi.Project.Api.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -29,6 +31,10 @@ namespace Imi.Project.Api
         {
             services.AddControllers();
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DefaultDatabase")));
+            services.AddScoped<IFilmRepository, FilmRepository>();
+            services.AddScoped<IDirectorRepository, DirectorRepository>();
+            services.AddScoped<IGenreRepository, GenreRepository>();
+            services.AddScoped<IActorRepository, ActorRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
