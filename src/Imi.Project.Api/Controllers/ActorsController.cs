@@ -1,4 +1,5 @@
 ﻿using Imi.Project.Api.Core.DTOs.Actors;
+using Imi.Project.Api.Core.Entities;
 using Imi.Project.Api.Core.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,6 +44,42 @@ namespace Imi.Project.Api.Controllers
             };
 
             return Ok(actorDto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(ActorRequestDto actorDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values);
+            }
+            var actor = new Actor
+            {
+                Name = actorDto.Name
+            };
+            await _actorRepository.AddAsync(actor);
+            return Ok();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(ActorRequestDto actorDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values);
+            }
+
+            var actor = await _actorRepository.GetByIdAsync(actorDto.Id);
+
+            if (actor == null)
+            {
+                return NotFound($"Failed! No actor found with id {actorDto.Id}");
+            }
+
+            actor.Name = actorDto.Name;
+            await _actorRepository.UpdateAsync(actor);
+
+            return Ok();
         }
 
         [HttpDelete("{id}")]
