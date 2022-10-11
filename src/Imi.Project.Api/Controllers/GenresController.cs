@@ -1,4 +1,5 @@
 ﻿using Imi.Project.Api.Core.DTOs.Genres;
+using Imi.Project.Api.Core.Entities;
 using Imi.Project.Api.Core.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,6 +44,42 @@ namespace Imi.Project.Api.Controllers
             };
 
             return Ok(genreDto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(GenreRequestDto genreDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values);
+            }
+            var genre = new Genre
+            {
+                Name = genreDto.Name
+            };
+            await _genreRepository.AddAsync(genre);
+            return Ok();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(GenreRequestDto genreDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values);
+            }
+
+            var genre = await _genreRepository.GetByIdAsync(genreDto.Id);
+
+            if (genre == null)
+            {
+                return NotFound($"Failed! No genre found with id {genreDto.Id}");
+            }
+
+            genre.Name = genreDto.Name;
+            await _genreRepository.UpdateAsync(genre);
+
+            return Ok();
         }
 
         [HttpDelete("{id}")]
