@@ -1,4 +1,5 @@
 ﻿using Imi.Project.Api.Core.DTOs.Directors;
+using Imi.Project.Api.Core.Entities;
 using Imi.Project.Api.Core.Repositories.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,6 +44,42 @@ namespace Imi.Project.Api.Controllers
             };
 
             return Ok(directorDto);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Add(DirectorRequestDto directorDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values);
+            }
+            var director = new Director
+            {
+                Name = directorDto.Name
+            };
+            await _directorRepository.AddAsync(director);
+            return Ok();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(DirectorRequestDto directorDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState.Values);
+            }
+
+            var director = await _directorRepository.GetByIdAsync(directorDto.Id);
+
+            if (director == null)
+            {
+                return NotFound($"Failed! No director found with id {directorDto.Id}");
+            }
+
+            director.Name = directorDto.Name;
+            await _directorRepository.UpdateAsync(director);
+
+            return Ok();
         }
 
         [HttpDelete("{id}")]
