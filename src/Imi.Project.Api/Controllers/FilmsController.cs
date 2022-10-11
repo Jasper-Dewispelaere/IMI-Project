@@ -48,7 +48,6 @@ namespace Imi.Project.Api.Controllers
                     Id = f.Genre.Id,
                     Name = f.Genre.Name
                 }
-                //UNFINISHED
             });
 
             return Ok(filmsDto);
