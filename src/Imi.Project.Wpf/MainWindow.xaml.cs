@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Imi.Project.Wpf.ApiResponseModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -17,6 +18,9 @@ using System.Windows.Shapes;
 
 namespace Imi.Project.Wpf
 {
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
     public partial class MainWindow : Window
     {
         private readonly IHttpClientFactory _httpClientFactory;
@@ -31,14 +35,41 @@ namespace Imi.Project.Wpf
 
         private async void Window_Loaded(object sender, RoutedEventArgs e) 
         {
-            var respone = await _httpClient.GetAsync("films");
+            var response = await _httpClient.GetAsync("films");
 
-            if (respone.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
             {
-                using var responseStream = await respone.Content.ReadAsStreamAsync();
-                //var filmsResponse = await JsonSerializer.DeserializeAsync<ApiBaseResponse<IEnumerable<FilmsApiResponse>>>(responseStream);
+                using var responseStream = await response.Content.ReadAsStreamAsync();
+                var filmsResponse = await JsonSerializer.DeserializeAsync<IEnumerable<FilmsApiResponse>>(responseStream);
 
+                FillFilmInListBox(filmsResponse);
             }
+            else
+            {
+                ShowFeedback(response.ReasonPhrase);
+            }
+        }
+
+        private void FillFilmInListBox(IEnumerable<FilmsApiResponse> films)
+        {
+            lstFilms.Items.Clear();
+            foreach (var film in films)
+            {
+                lstFilms.Items.Add(film);
+            }
+        }
+
+        private void ShowFeedback(string message)
+        {
+            lblFeedback.Content = $"Fout: {message}";
+            lblFeedback.Background = Brushes.Red;
+            lblFeedback.Foreground = Brushes.White;
+            lblFeedback.FontWeight = FontWeights.Bold;
+        }
+
+        private void lstFilms_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
         }
     }
 }
