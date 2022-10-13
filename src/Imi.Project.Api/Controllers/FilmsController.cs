@@ -138,7 +138,6 @@ namespace Imi.Project.Api.Controllers
             }
 
             await _filmRepository.DeleteAsync(film);
-
             return Ok();
         }
     }
