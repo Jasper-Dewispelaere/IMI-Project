@@ -13,24 +13,16 @@ namespace Imi.Project.Api.Controllers
     public class FilmsController : ControllerBase
     {
         protected readonly IFilmRepository _filmRepository;
-        protected readonly IDirectorRepository _directorRepository;
-        protected readonly IGenreRepository _genreRepository;
-        protected readonly IActorRepository _actorRepository;
 
-        public FilmsController(IFilmRepository filmRepository, IDirectorRepository directorRepository, 
-            IGenreRepository genreRepository, IActorRepository actorRepository)
+        public FilmsController(IFilmRepository filmRepository)
         {
             _filmRepository = filmRepository;
-            _directorRepository = directorRepository;
-            _genreRepository = genreRepository;
-            _actorRepository = actorRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
             var films = await _filmRepository.ListAllAsync();
-            var actors = await _actorRepository.ListAllAsync();
             var filmsDto = films.Select(f => new FilmResponseDto
             {
                 Id = f.Id,
