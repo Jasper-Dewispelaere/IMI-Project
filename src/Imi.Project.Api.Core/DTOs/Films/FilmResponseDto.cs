@@ -15,7 +15,6 @@ namespace Imi.Project.Api.Core.DTOs.Films
         public string Image { get; set; }
         public int ReleaseYear { get; set; }
         public DirectorResponseDto Director { get; set; }
-        public GenreResponseDto Genre { get; set; } 
-        public ICollection<ActorResponseDto> Actor { get; set; } 
+        public GenreResponseDto Genre { get; set; }
     }
 }

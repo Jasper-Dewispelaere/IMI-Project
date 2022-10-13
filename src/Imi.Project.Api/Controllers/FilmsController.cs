@@ -30,9 +30,7 @@ namespace Imi.Project.Api.Controllers
         public async Task<IActionResult> Get()
         {
             var films = await _filmRepository.ListAllAsync();
-            var genres = await _genreRepository.ListAllAsync();
-            var directors = await _directorRepository.ListAllAsync();
-            var actos = await _actorRepository.ListAllAsync();
+            var actors = await _actorRepository.ListAllAsync();
             var filmsDto = films.Select(f => new FilmResponseDto
             {
                 Id = f.Id,
