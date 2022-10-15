@@ -25,6 +25,10 @@ namespace Imi.Project.Wpf
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private HttpClient _httpClient;
+
+        private Guid selectedFilmId = Guid.Empty;
+        private Guid selectedFilmDirectorId = Guid.Empty;
+        private Guid selectedFilmGenreId = Guid.Empty;
         public MainWindow(IHttpClientFactory httpClientFactory)
         {
             InitializeComponent();
@@ -34,6 +38,11 @@ namespace Imi.Project.Wpf
         }
 
         private async void Window_Loaded(object sender, RoutedEventArgs e) 
+        {
+            await SetupAsync();   
+        }
+
+        private async Task SetupAsync() 
         {
             var response = await _httpClient.GetAsync("films");
 
@@ -91,8 +100,9 @@ namespace Imi.Project.Wpf
 
         private void ShowFilmDetails(FilmsApiResponse filmDetail)
         {
-            txtBlockTitle.Text = filmDetail.Title;
-            txtBlockReleaseYear.Text = filmDetail.ReleaseYear.ToString();
+            txtBoxTitle.Text = filmDetail.Title;
+            txtBoxReleaseYear.Text = filmDetail.ReleaseYear.ToString();
+            selectedFilmId = filmDetail.Id;
             BitmapImage thumbnail = new BitmapImage();
             thumbnail.BeginInit();
             thumbnail.UriSource = new Uri(filmDetail.Image);
@@ -100,9 +110,15 @@ namespace Imi.Project.Wpf
             imgCover.Source = thumbnail;
         }
 
-        private void btnSave_Click(object sender, RoutedEventArgs e)
+        private async void btnSave_Click(object sender, RoutedEventArgs e)
         {
-
+            //var film = new FilmsApiResponse();
+            //film.Id = selectedFilmId;
+            //film.Title = txtBoxTitle.Text;
+            //film.ReleaseYear = Int32.Parse(txtBoxReleaseYear.Text);
+            //var filmContent = new StringContent(film);
+            //var request = await _httpClient.PutAsync("films", filmContent);
+            //await SetupAsync();
         }
 
         private void ShowFeedback(string message)
@@ -115,8 +131,8 @@ namespace Imi.Project.Wpf
 
         private void ClearFilmDetails()
         {
-            txtBlockReleaseYear.Text = string.Empty;
-            txtBlockTitle.Text = string.Empty;
+            txtBoxReleaseYear.Text = string.Empty;
+            txtBoxTitle.Text = string.Empty;
             imgCover.Source = null;
         }
     }
