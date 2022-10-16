@@ -84,13 +84,24 @@ namespace Imi.Project.Wpf
         private async void GetFilmDetails(FilmsApiResponse film)
         {
             var response = await _httpClient.GetAsync($"films/{film.Id}");
+            var director = await _httpClient.GetAsync($"directors/00000000-0000-0000-0000-000000000001");
+            var genre = await _httpClient.GetAsync($"genres/00000000-0000-0000-0000-000000000001");
 
             if (response.IsSuccessStatusCode)
             {
+                //Informatie van de film ophalen
                 using var responseStream = await response.Content.ReadAsStreamAsync();
                 var filmDetailResponse = await JsonSerializer.DeserializeAsync<FilmsApiResponse>(responseStream);
+                //Director ophalen van de film
+                using var responseStreamDirecor = await director.Content.ReadAsStreamAsync();
+                var filmDirectorDetailResponse = await JsonSerializer.DeserializeAsync<DirectorsApiResponse>(responseStreamDirecor);
+                //Genre ophalen van de film
+                using var responseStreamGenre = await genre.Content.ReadAsStreamAsync();
+                var filmGenreDetailResponse = await JsonSerializer.DeserializeAsync<GenresApiResponse>(responseStreamGenre);
 
                 ShowFilmDetails(filmDetailResponse);
+                ShowFilmDirectorDetails(filmDirectorDetailResponse);
+                ShowFilmGenreDetails(filmGenreDetailResponse);
             }
             else
             {
@@ -108,6 +119,16 @@ namespace Imi.Project.Wpf
             thumbnail.UriSource = new Uri(filmDetail.Image);
             thumbnail.EndInit();
             imgCover.Source = thumbnail;
+        }
+
+        private void ShowFilmDirectorDetails(DirectorsApiResponse directorDetail)
+        {
+            txtBoxDirector.Text = directorDetail.Name;
+        }
+
+        private void ShowFilmGenreDetails(GenresApiResponse genreDetail)
+        {
+            txtBoxGenre.Text = genreDetail.Name;
         }
 
         private async void btnSave_Click(object sender, RoutedEventArgs e)
