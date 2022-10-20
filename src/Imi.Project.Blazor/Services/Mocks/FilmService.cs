@@ -7,7 +7,13 @@ namespace Imi.Project.Blazor.Services.Mocks
     {
         List<Film> filmList = FilmSeeding.GetFilms;
         List<Genre> genreList = GenreSeeding.GetGenres;
+        List<Director> directorList = DirectorSeeding.GetDirectors;
         private readonly ICRUDService<Film> filmService;
+
+        public FilmService(ICRUDService<Film> filmService)
+        {
+            this.filmService = filmService;
+        }
 
         public async Task<Film> Get(Guid id)
         {
@@ -25,15 +31,11 @@ namespace Imi.Project.Blazor.Services.Mocks
                 Image = f.Image,
                 ReleaseYear = f.ReleaseYear,
                 DirectorId = f.DirectorId,
+                DirectorName = directorList.SingleOrDefault(d => d.Id.Equals(f.DirectorId)).Name,
                 GenreId = f.GenreId,
                 GenreName = genreList.SingleOrDefault(g => g.Id.Equals(f.GenreId)).Name
             }).AsQueryable();
             
-        }
-
-        public FilmService(ICRUDService<Film> filmService)
-        { 
-            this.filmService = filmService;
         }
 
         public Task Create(Film item)
