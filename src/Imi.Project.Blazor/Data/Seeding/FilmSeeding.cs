@@ -6,7 +6,6 @@ namespace Imi.Project.Blazor.Data.Seeding
     {
         public static List<Film> films = new List<Film>
         {
-            new Film() { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), Title = "The Shining", Image = "https://i.imgur.com/WaC2BJy.jpg", ReleaseYear = 1980, DirectorId = Guid.Parse("00000000-0000-0000-0000-000000000001"), GenreId = Guid.Parse("00000000-0000-0000-0000-000000000008")},
             new Film() { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), Title = "The Shining", Image = "https://i.imgur.com/WaC2BJy.jpg", ReleaseYear = 1980, DirectorId = Guid.Parse("00000000-0000-0000-0000-000000000001"), GenreId = Guid.Parse("00000000-0000-0000-0000-000000000008") },
             new Film() { Id = Guid.Parse("00000000-0000-0000-0000-000000000002"), Title = "The Terminator", Image = "https://i.imgur.com/oG6lDFU.jpg", ReleaseYear = 1984, DirectorId = Guid.Parse("00000000-0000-0000-0000-000000000003"), GenreId = Guid.Parse("00000000-0000-0000-0000-000000000001") },
             new Film() { Id = Guid.Parse("00000000-0000-0000-0000-000000000003"), Title = "Back to the Future", Image = "https://i.imgur.com/dlmlSTB.jpg", ReleaseYear = 1985, DirectorId = Guid.Parse("00000000-0000-0000-0000-000000000002"), GenreId = Guid.Parse("00000000-0000-0000-0000-000000000002") },
@@ -28,5 +27,13 @@ namespace Imi.Project.Blazor.Data.Seeding
             new Film() { Id = Guid.Parse("00000000-0000-0000-0000-000000000019"), Title = "The Big Lebowski", Image = "https://i.imgur.com/IksTt38.jpg", ReleaseYear = 1998, DirectorId = Guid.Parse("00000000-0000-0000-0000-000000000012"), GenreId = Guid.Parse("00000000-0000-0000-0000-000000000004") },
             new Film() { Id = Guid.Parse("00000000-0000-0000-0000-000000000020"), Title = "Home Alone", Image = "https://i.imgur.com/uyjsvzX.jpg", ReleaseYear = 1990, DirectorId = Guid.Parse("00000000-0000-0000-0000-000000000006"), GenreId = Guid.Parse("00000000-0000-0000-0000-000000000004") }
         };
+
+        public static List<Film> GetFilms
+        {
+            get 
+            {
+                return films;
+            }
+        }
     }
 }
