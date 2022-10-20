@@ -16,9 +16,9 @@ namespace Imi.Project.Blazor.Models
         [Required]
         public int ReleaseYear { get; set; }
         public Guid DirectorId { get; set; }
-        public Director Director { get; set; }
+        public string DirectorName { get; set; }
         public Guid GenreId { get; set; }
-        public Genre Genre { get; set; }
-        public ICollection<Actor> Actors { get; set; }
+        public string GenreName { get; set; }
+        //public ICollection<Actor> Actors { get; set; }
     }
 }

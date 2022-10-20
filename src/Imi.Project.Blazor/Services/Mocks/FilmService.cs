@@ -6,6 +6,7 @@ namespace Imi.Project.Blazor.Services.Mocks
     public class FilmService : ICRUDService<Film>
     {
         List<Film> filmList = FilmSeeding.GetFilms;
+        List<Genre> genreList = GenreSeeding.GetGenres;
         private readonly ICRUDService<Film> filmService;
 
         public async Task<Film> Get(Guid id)
@@ -25,6 +26,7 @@ namespace Imi.Project.Blazor.Services.Mocks
                 ReleaseYear = f.ReleaseYear,
                 DirectorId = f.DirectorId,
                 GenreId = f.GenreId,
+                GenreName = genreList.SingleOrDefault(g => g.Id.Equals(f.GenreId)).Name
             }).AsQueryable();
             
         }

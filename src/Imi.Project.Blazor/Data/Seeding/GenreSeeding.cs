@@ -17,5 +17,13 @@ namespace Imi.Project.Blazor.Data.Seeding
             new Genre() { Id = Guid.Parse("00000000-0000-0000-0000-000000000009"), Name = "Romance"},
             new Genre() { Id = Guid.Parse("00000000-0000-0000-0000-000000000010"), Name = "Thriller"}
         };
+
+        public static List<Genre> GetGenres
+        {
+            get
+            {
+                return genres;
+            }
+        }
     }
 }
