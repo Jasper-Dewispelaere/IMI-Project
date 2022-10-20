@@ -10,6 +10,11 @@ namespace Imi.Project.Blazor.Services.Mocks
 
         public async Task<Film> Get(Guid id)
         {
+            return await Task.FromResult(filmList.SingleOrDefault(x => x.Id == id));
+        }
+
+        public async Task<IQueryable<Film>> GetAll()
+        {
             var films = await filmService.GetAll();
 
             return filmList.Select(f => new Film
@@ -20,13 +25,8 @@ namespace Imi.Project.Blazor.Services.Mocks
                 ReleaseYear = f.ReleaseYear,
                 DirectorId = f.DirectorId,
                 GenreId = f.GenreId,
-
-            }).SingleOrDefault(x => x.Id == id);
-        }
-
-        public Task<IQueryable<Film>> GetAll()
-        {
-            throw new NotImplementedException();
+            }).AsQueryable();
+            
         }
 
         public FilmService(ICRUDService<Film> filmService)

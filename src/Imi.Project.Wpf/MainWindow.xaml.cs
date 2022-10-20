@@ -123,23 +123,41 @@ namespace Imi.Project.Wpf
 
         private void ShowFilmDirectorDetails(DirectorsApiResponse directorDetail)
         {
+            selectedFilmDirectorId = directorDetail.Id;
             txtBoxDirector.Text = directorDetail.Name;
         }
 
         private void ShowFilmGenreDetails(GenresApiResponse genreDetail)
         {
+            selectedFilmGenreId = genreDetail.Id;
             txtBoxGenre.Text = genreDetail.Name;
         }
 
         private async void btnSave_Click(object sender, RoutedEventArgs e)
         {
-            //var film = new FilmsApiResponse();
-            //film.Id = selectedFilmId;
-            //film.Title = txtBoxTitle.Text;
-            //film.ReleaseYear = Int32.Parse(txtBoxReleaseYear.Text);
-            //var filmContent = new StringContent(film);
-            //var request = await _httpClient.PutAsync("films", filmContent);
-            //await SetupAsync();
+            //film Update
+            var film = new FilmsApiResponse();
+            film.Id = selectedFilmId;
+            film.Title = txtBoxTitle.Text;
+            film.ReleaseYear = Int32.Parse(txtBoxReleaseYear.Text);
+            var filmContent = new StringContent(film);
+            var filmRequest = await _httpClient.PutAsync("films", filmContent);
+
+            //direcot Update
+            var director = new DirectorsApiResponse();
+            director.Id = selectedFilmDirectorId;
+            director.Name = txtBoxDirector.Text;
+            var directorContent = new StringContent(director.ToString());
+            var direcorRequest = await _httpClient.PutAsync("directors", directorContent);
+
+            //genre Update
+            var genre = new GenresApiResponse();
+            genre.Id = selectedFilmGenreId;
+            genre.Name = txtBoxGenre.Text;
+            var genreContent = new StringContent(genre.ToString());
+            var genreRequest = await _httpClient.PutAsync("genres", genreContent);
+
+            await SetupAsync();
         }
 
         private void ShowFeedback(string message)
@@ -154,6 +172,8 @@ namespace Imi.Project.Wpf
         {
             txtBoxReleaseYear.Text = string.Empty;
             txtBoxTitle.Text = string.Empty;
+            txtBoxDirector.Text = string.Empty;
+            txtBoxGenre.Text = string.Empty;
             imgCover.Source = null;
         }
     }
