@@ -35,7 +35,6 @@ namespace Imi.Project.Blazor.Services.Mocks
                 GenreId = f.GenreId,
                 GenreName = genreList.SingleOrDefault(g => g.Id.Equals(f.GenreId)).Name
             }).AsQueryable();
-            
         }
 
         public Task Create(Film item)

@@ -1,0 +1,39 @@
+﻿@using Imi.Project.Blazor.Models
+<h3>FilmList</h3>
+
+<div class="container">
+    <button class="btn btn-primary" style="position: absolute;top: 0;right: 0;">Add Game</button>
+    <div class="row">
+        @foreach (var item in Items)
+        {
+            <div class="col">
+                <div class="card h-100" style="width: 18rem">
+                        @if (@item.Image == null)
+                        {
+                            <img class="card-img-top" src="/Images/placeholder.jpg" alt="placeholder">
+                        }
+                        else
+                        {
+                            <img class="card-img-top" src="@item.Image" alt="@item.Image">
+                        }
+                        <div class="card-body">
+                            <h4><b>@item.Title</b></h4>
+                            <h4>@item.GenreName</h4>
+                            <p>@item.DirectorName</p>
+                            <p>@item.ReleaseYear</p>
+                            <button class="btn btn-warning">Edit</button>
+                            <button class="btn btn-danger">Delete</button>
+                        </div>
+                    </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Film[] Items { get; set; }
+
+    [Parameter]
+    public EventCallback OnAdd { get; set; }
+}
