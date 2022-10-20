@@ -21,8 +21,11 @@ namespace Imi.Project.Wpf.ApiResponseModels
         [JsonPropertyName("image")]
         public string? Image { get; set; }
 
-        [JsonPropertyName("director/id")]
-        public Guid DirectorId { get; set; }
+        [JsonPropertyName("director")]
+        public DirectorsApiResponse Director { get; set; }
+
+        [JsonPropertyName("genre")]
+        public GenresApiResponse Genre { get; set; }
 
         public override string ToString()
         {

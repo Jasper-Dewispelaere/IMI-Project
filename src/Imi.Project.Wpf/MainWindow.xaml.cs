@@ -84,8 +84,8 @@ namespace Imi.Project.Wpf
         private async void GetFilmDetails(FilmsApiResponse film)
         {
             var response = await _httpClient.GetAsync($"films/{film.Id}");
-            var director = await _httpClient.GetAsync($"directors/00000000-0000-0000-0000-000000000001");
-            var genre = await _httpClient.GetAsync($"genres/00000000-0000-0000-0000-000000000001");
+            var director = await _httpClient.GetAsync($"directors/{film.Director.Id}");
+            var genre = await _httpClient.GetAsync($"genres/{film.Genre.Id}");
 
             if (response.IsSuccessStatusCode)
             {
