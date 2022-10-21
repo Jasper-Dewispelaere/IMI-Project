@@ -11,8 +11,6 @@ namespace Imi.Project.Api.Core.DTOs.Films
     {
         [Required(ErrorMessage = "{0} is required")]
         public string Title { get; set; }
-
-        [Required(ErrorMessage = "{0} is required")]
         public string Image { get; set; }
 
         [Required(ErrorMessage = "{0} is required")]

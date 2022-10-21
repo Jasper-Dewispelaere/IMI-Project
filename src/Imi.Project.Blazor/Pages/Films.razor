@@ -1,7 +1,30 @@
-﻿@page "/films"
+﻿@*@page "/films"
+@using Imi.Project.Blazor.Models
+@inject ICRUDService<Film> service;
 
 <h3>Films</h3>
+<div>
+    <Films Items="articles"
+           OnAdd="AddArticle"
+           OnEdit="EditArticle"
+           OnDelete="DeleteArticle">
+    </Films>
+</div>
 
 @code {
+    private Film[] filmListItems;
+    private Film currentFilm;
+    private string error;
 
+    protected override async Task OnInitializedAsync()
+    {
+        await ShowList();
+    }
+
+    public async Task ShowList()
+    {
+        filmListItems = await service.GetAll();
+        this.currentGame = null;
+    }
 }
+*@

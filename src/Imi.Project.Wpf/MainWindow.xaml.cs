@@ -1,8 +1,10 @@
-﻿using Imi.Project.Wpf.ApiResponseModels;
+﻿using Imi.Project.Wpf.ApiRequestModels;
+using Imi.Project.Wpf.ApiResponseModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -29,6 +31,7 @@ namespace Imi.Project.Wpf
         private Guid selectedFilmId = Guid.Empty;
         private Guid selectedFilmDirectorId = Guid.Empty;
         private Guid selectedFilmGenreId = Guid.Empty;
+        private string FilmImg = ""; //This is used for the FilmUpdate so it keeps the right img 
         public MainWindow(IHttpClientFactory httpClientFactory)
         {
             InitializeComponent();
@@ -114,6 +117,7 @@ namespace Imi.Project.Wpf
             txtBoxTitle.Text = filmDetail.Title;
             txtBoxReleaseYear.Text = filmDetail.ReleaseYear.ToString();
             selectedFilmId = filmDetail.Id;
+            FilmImg = filmDetail.Image;
             BitmapImage thumbnail = new BitmapImage();
             thumbnail.BeginInit();
             thumbnail.UriSource = new Uri(filmDetail.Image);
@@ -136,26 +140,26 @@ namespace Imi.Project.Wpf
         private async void btnSave_Click(object sender, RoutedEventArgs e)
         {
             //film Update
-            var film = new FilmsApiResponse();
-            film.Id = selectedFilmId;
-            film.Title = txtBoxTitle.Text;
-            film.ReleaseYear = Int32.Parse(txtBoxReleaseYear.Text);
-            var filmContent = new StringContent(film);
-            var filmRequest = await _httpClient.PutAsync("films", filmContent);
+            var UpdatedFilm = new FilmsApiRequest();
+            UpdatedFilm.Id = selectedFilmId;
+            UpdatedFilm.Title = txtBoxTitle.Text;
+            UpdatedFilm.ReleaseYear = Int32.Parse(txtBoxReleaseYear.Text);
+            UpdatedFilm.Image = FilmImg;
+            UpdatedFilm.DirectorId = selectedFilmDirectorId;
+            UpdatedFilm.GenreId = selectedFilmGenreId;
+            var filmRequest = await _httpClient.PutAsJsonAsync("Films", UpdatedFilm);
 
-            //direcot Update
-            var director = new DirectorsApiResponse();
-            director.Id = selectedFilmDirectorId;
-            director.Name = txtBoxDirector.Text;
-            var directorContent = new StringContent(director.ToString());
-            var direcorRequest = await _httpClient.PutAsync("directors", directorContent);
+            //director Update
+            var UpdatedDirector = new DirectorsApiResponse();
+            UpdatedDirector.Id = selectedFilmDirectorId;
+            UpdatedDirector.Name = txtBoxDirector.Text;
+            var direcorRequest = await _httpClient.PutAsJsonAsync("directors", UpdatedDirector);
 
-            //genre Update
-            var genre = new GenresApiResponse();
-            genre.Id = selectedFilmGenreId;
-            genre.Name = txtBoxGenre.Text;
-            var genreContent = new StringContent(genre.ToString());
-            var genreRequest = await _httpClient.PutAsync("genres", genreContent);
+            ////genre Update
+            var UpdatedGenre = new GenresApiResponse();
+            UpdatedGenre.Id = selectedFilmGenreId;
+            UpdatedGenre.Name = txtBoxGenre.Text;
+            var genreRequest = await _httpClient.PutAsJsonAsync("genres", UpdatedGenre);
 
             await SetupAsync();
         }
