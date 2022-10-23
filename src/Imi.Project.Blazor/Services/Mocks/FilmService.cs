@@ -39,17 +39,27 @@ namespace Imi.Project.Blazor.Services.Mocks
 
         public Task Create(Film item)
         {
-            throw new NotImplementedException();
+            item.Id = Guid.NewGuid();
+            filmList.Add(item);
+            return Task.CompletedTask;
         }
 
         public Task Delete(Guid id)
         {
-            throw new NotImplementedException();
+            var film = filmList.SingleOrDefault(x => x.Id == id);
+            if (film == null) throw new ArgumentException("ERROR film not found!");
+            filmList.Remove(film);
+            return Task.CompletedTask;
         }
 
         public Task Update(Film item)
         {
-            throw new NotImplementedException();
+            var film = filmList.SingleOrDefault(x => x.Id == item.Id);
+            if (film == null) throw new ArgumentException("ERROR film not found!");
+            film.Title = item.Title;
+            film.ReleaseYear = item.ReleaseYear;
+            film.Image = item.Image;
+            return Task.CompletedTask;
         }
     }
 }

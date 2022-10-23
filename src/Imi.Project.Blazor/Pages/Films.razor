@@ -1,4 +1,4 @@
-﻿@*@page "/films"
+﻿page "/films"
 @using Imi.Project.Blazor.Models
 @inject ICRUDService<Film> service;
 
@@ -12,19 +12,58 @@
 </div>
 
 @code {
-    private Film[] filmListItems;
+    private Film[] films;
     private Film currentFilm;
     private string error;
 
     protected override async Task OnInitializedAsync()
     {
-        await ShowList();
+        await RefreshFilms();
     }
 
-    public async Task ShowList()
+    public async Task RefreshFilms() 
+    { 
+        films = (await service.GetAll()).ToArray(); 
+        this.currentFilm = null; 
+    }
+
+    public void AddFilm()
     {
-        filmListItems = await service.GetAll();
-        this.currentGame = null;
+        this.currentFilm = new Film();
+    }
+
+    public async Task EditFilm(Film item)
+    {
+        this.currentFilm = await service.Get(item.Id);
+    }
+
+    public async Task SaveFilm(Film item)
+    {
+        try
+        {
+            if (currentFilm.Id == Guid.Empty)
+                await service.Create(currentFilm);
+            else
+                await service.Update(currentFilm);
+
+            await this.RefreshFilms();
+        }
+        catch(Exception ex)
+        {
+            this.error = ex.Message;
+        }
+    }
+
+    public async Task DeleteFilm(Film item)
+    {
+        try
+        {
+            await service.Delete(item.Id);
+            await this.RefreshFilms();
+        }
+        catch (Exception ex)
+        {
+            this.error = ex.Message;
+        }
     }
 }
-*@
