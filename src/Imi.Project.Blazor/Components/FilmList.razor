@@ -10,9 +10,9 @@
                         <img class="card-img-top" src="@item.Image" alt="@item.Image">
                         <div class="card-body">
                             <h4><b>@item.Title</b></h4>
-                            <h4>@item.GenreName</h4>
-                            <p>@item.DirectorName</p>
                             <p>@item.ReleaseYear</p>
+                            <p>@item.DirectorName</p>
+                            <p>@item.GenreName</p>
                             <button class="btn btn-warning" @onclick="f => OnEdit.InvokeAsync(item)">Edit</button>
                             <button class="btn btn-danger" @onclick="f => OnDelete.InvokeAsync(item)">Delete</button>
                         </div>
