@@ -25,7 +25,8 @@ namespace Imi.Project.Blazor.Data.Seeding
             new Film() { Id = Guid.Parse("00000000-0000-0000-0000-000000000017"), Title = "Cast Away", Image = "https://i.imgur.com/qsWpLG0.jpg", ReleaseYear = 2000, DirectorId = Guid.Parse("00000000-0000-0000-0000-000000000002"), GenreId = Guid.Parse("00000000-0000-0000-0000-000000000002") },
             new Film() { Id = Guid.Parse("00000000-0000-0000-0000-000000000018"), Title = "Up", Image = "https://i.imgur.com/1qTvRjR.jpg", ReleaseYear = 2009, DirectorId = Guid.Parse("00000000-0000-0000-0000-000000000004"), GenreId = Guid.Parse("00000000-0000-0000-0000-000000000003") },
             new Film() { Id = Guid.Parse("00000000-0000-0000-0000-000000000019"), Title = "The Big Lebowski", Image = "https://i.imgur.com/IksTt38.jpg", ReleaseYear = 1998, DirectorId = Guid.Parse("00000000-0000-0000-0000-000000000012"), GenreId = Guid.Parse("00000000-0000-0000-0000-000000000004") },
-            new Film() { Id = Guid.Parse("00000000-0000-0000-0000-000000000020"), Title = "Home Alone", Image = "https://i.imgur.com/uyjsvzX.jpg", ReleaseYear = 1990, DirectorId = Guid.Parse("00000000-0000-0000-0000-000000000007"), GenreId = Guid.Parse("00000000-0000-0000-0000-000000000004") }
+            new Film() { Id = Guid.Parse("00000000-0000-0000-0000-000000000020"), Title = "Home Alone", Image = "https://i.imgur.com/uyjsvzX.jpg", ReleaseYear = 1990, DirectorId = Guid.Parse("00000000-0000-0000-0000-000000000007"), GenreId = Guid.Parse("00000000-0000-0000-0000-000000000004") },
+            new Film() { Id = Guid.Parse("00000000-0000-0000-0000-000000000021"), Title = "Skyfall", Image = "https://i.imgur.com/L2Z9bcw.jpg", ReleaseYear = 2012, DirectorId = Guid.Parse("00000000-0000-0000-0000-000000000008"), GenreId = Guid.Parse("00000000-0000-0000-0000-000000000001") }
         };
 
         public static List<Film> GetFilms
