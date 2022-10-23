@@ -1,7 +1,12 @@
+using Imi.Project.Blazor.Models;
+using Imi.Project.Blazor.Services;
+using Imi.Project.Blazor.Services.Mocks;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddTransient<ICRUDService<Film>, FilmService>();
 
 var app = builder.Build();
 

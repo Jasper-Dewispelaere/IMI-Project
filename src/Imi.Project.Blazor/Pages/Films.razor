@@ -1,14 +1,15 @@
-﻿page "/films"
+﻿@page "/films"
+@using Imi.Project.Blazor.Components
 @using Imi.Project.Blazor.Models
 @inject ICRUDService<Film> service;
 
 <h3>Films</h3>
 <div>
-    <Films Items="films"
-           OnAdd="AddFilm"
-           OnEdit="EditFilm"
-           OnDelete="DeleteFilm">
-    </Films>
+    <FilmList Items="films"
+              OnAdd="AddFilm"
+              OnEdit="EditFilm"
+              OnDelete="DeleteFilm">
+    </FilmList>
 </div>
 
 @code {
