@@ -1,4 +1,4 @@
-﻿namespace Imi.Project.Blazor.Data
+﻿namespace Imi.Project.Blazor.Models
 {
     public class Quiz
     {

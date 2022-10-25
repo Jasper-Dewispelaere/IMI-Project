@@ -1,4 +1,6 @@
-﻿namespace Imi.Project.Blazor.Data.Seeding.QuizSeeding
+﻿using Imi.Project.Blazor.Models;
+
+namespace Imi.Project.Blazor.Data.Seeding.QuizSeeding
 {
     public class QuestionSeeding
     {
