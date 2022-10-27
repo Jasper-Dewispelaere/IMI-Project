@@ -1,0 +1,48 @@
+﻿@using Imi.Project.Blazor.Models
+
+<EditForm Model="@filmItem" OnValidSubmit="@(e => OnSaveClick.InvokeAsync(filmItem))">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="title">Title: </label>
+        <InputText id="title" @bind-Value="filmItem.Title" class="form-control" />
+        <ValidationMessage For="@(() => filmItem.Title)" />
+    </div>
+
+    <div class="form-group">
+        <label for="image">Image (Url): </label>
+        <InputText id="image" @bind-Value="gameItem.Image" class="form-control" />
+        <ValidationMessage For="@(() => filmItem.Image)" />
+    </div>
+
+    <div class="form-group">
+        <label for="releaseYear">Release Year: </label>
+        <InputDate id="releaseYear" @bind-Value="filmItem.ReleaseYear" class="form-control" />
+        <ValidationMessage For="@(() => filmItem.ReleaseYear)" />
+    </div>
+
+    <div class="form-group">
+        <label for="director">Director: </label>
+        <InputText id="director" @bind-Value="filmItem.DirectorName" class="form-control" />
+        <ValidationMessage For="@(() => filmItem.DirectorName)" />
+    </div>
+
+    <div class="form-group">
+        <label for="genre">Genre: </label>
+        <InputText id="genre" @bind-Value="filmItem.GenreName" class="form-control" />
+        <ValidationMessage For="@(() => filmItem.GenreName)" />
+    </div>
+
+    <button type="submit" class="btn btn-primary" @onclick="OnSaveClick">Save</button>
+    <button type="button" class="btn btn-warning" @onclick="OnCancelClick">Cancel</button>
+</EditForm>
+
+@code {
+    [Parameter]
+    public Film filmItem { get; set; }
+    [Parameter]
+    public EventCallback<Film> OnSaveClick { get; set; }
+    [Parameter]
+    public EventCallback OnCancelClick { get; set; }
+}

@@ -5,11 +5,21 @@
 
 <h3>Films</h3>
 <div>
-    <FilmList Items="films"
-              OnAdd="AddFilm"
-              OnEdit="EditFilm"
-              OnDelete="DeleteFilm">
-    </FilmList>
+    @if(currentFilm == null)
+    { 
+        <FilmList Items="films"
+                  OnAdd="AddFilm"
+                  OnEdit="EditFilm"
+                  OnDelete="DeleteFilm">
+        </FilmList>
+    }
+    else
+    {
+        <FilmForm filmItem="currentFilm"
+                  OnSaveClick="SaveFilm"
+                  OnCancelClick="RefreshFilms">
+        </FilmForm>
+    }
 </div>
 
 @code {
