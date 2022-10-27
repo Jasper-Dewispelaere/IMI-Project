@@ -10,6 +10,6 @@ namespace Imi.Project.Api.Core.Entities
     public class ApplicationUser : IdentityUser
     {
         public DateTime DateOfBirth { get; set; }
-        public bool AcceptTermsOfService { get; set; }
+        public bool HasApprovedTermsAndConditions { get; set; }
     }
 }
