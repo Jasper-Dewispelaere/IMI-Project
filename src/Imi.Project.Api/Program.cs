@@ -14,7 +14,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultDatabase")));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-{ 
+{
+    options.Password.RequiredLength = 4; 
+    options.Password.RequireNonAlphanumeric = true; 
+    options.Password.RequireLowercase = true;
+    options.Password.RequireDigit = true;
     options.SignIn.RequireConfirmedEmail = false; 
 }).AddEntityFrameworkStores<ApplicationDbContext>();
 

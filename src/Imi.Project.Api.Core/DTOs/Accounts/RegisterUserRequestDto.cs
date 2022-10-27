@@ -23,6 +23,7 @@ namespace Imi.Project.Api.Core.DTOs.Accounts
         public string ConfirmPassword { get; set; }
 
         [Required]
+        [DataType(DataType.Date)]
         public DateTime DateOfBirth { get; set; }
 
         [Required]
