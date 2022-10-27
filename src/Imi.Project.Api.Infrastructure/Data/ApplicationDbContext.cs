@@ -89,12 +89,11 @@ namespace Imi.Project.Api.Infrastructure.Data
                                 new { FilmId = Guid.Parse("00000000-0000-0000-0000-000000000020"), ActorId = Guid.Parse("00000000-0000-0000-0000-000000000037") },
                             });
                     });
-            base.OnModelCreating(modelBuilder);
 
             IPasswordHasher<ApplicationUser> passwordHasher = new PasswordHasher<ApplicationUser>();
 
             //Admin User
-            const string AdminUserName = "ImiUser";
+            const string AdminUserName = "ImiAdmin";
             const string AdminEmail = "admin@imi.be";
             const string AdminPassword = "Test123?";
             DateTime AdminDateOfBirth = DateTime.Now;
@@ -131,7 +130,7 @@ namespace Imi.Project.Api.Infrastructure.Data
                     Id = 1,
                     UserId = "1",
                     ClaimType = ClaimTypes.Role,
-                    ClaimValue = "admin"
+                    ClaimValue = "Admin"
                 });
 
             //User
@@ -177,14 +176,8 @@ namespace Imi.Project.Api.Infrastructure.Data
 
             refuserApplicationUser.PasswordHash = passwordHasher.HashPassword(refuserApplicationUser, RefuserPassword);
             modelBuilder.Entity<ApplicationUser>().HasData(refuserApplicationUser);
-            modelBuilder.Entity<IdentityUserClaim<string>>()
-                .HasData(new IdentityUserClaim<string>
-                {
-                    Id = 3,
-                    UserId = "3",
-                    ClaimType = ClaimTypes.Role,
-                    ClaimValue = "User"
-                });
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }
