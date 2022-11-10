@@ -53,10 +53,13 @@
         try
         {
             if (currentFilm.Id == Guid.Empty)
+            {
                 await service.Create(currentFilm);
+            }
             else
+            {
                 await service.Update(currentFilm);
-
+            }
             await this.RefreshFilms();
         }
         catch(Exception ex)
