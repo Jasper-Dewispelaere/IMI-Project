@@ -25,6 +25,8 @@
 @code {
     private Film[] films;
     private Film currentFilm;
+    private Genre[] availableGenres = new Genre[0];
+    private Director[] availableDirectors = new Director[0];
     private string error;
 
     protected override async Task OnInitializedAsync()
@@ -38,8 +40,9 @@
         this.currentFilm = null; 
     }
 
-    public void AddFilm()
+    public async void AddFilm()
     {
+        //this.availableGenres = (await).ToArray();
         this.currentFilm = new Film();
     }
 

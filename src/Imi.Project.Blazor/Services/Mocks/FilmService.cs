@@ -11,7 +11,20 @@ namespace Imi.Project.Blazor.Services.Mocks
 
         public async Task<Film> Get(Guid id)
         {
-            return await Task.FromResult(filmList.SingleOrDefault(x => x.Id == id));
+            //return await Task.FromResult(filmList.SingleOrDefault(x => x.Id == id));
+
+            return filmList.Select(f => new Film
+            {
+                Id = f.Id,
+                Title = f.Title,
+                Image = f.Image,
+                ReleaseYear = f.ReleaseYear,
+                DirectorId = f.DirectorId,
+                DirectorName = directorList.SingleOrDefault(e => e.Id.Equals(f.DirectorId)).Name,
+                GenreId = f.GenreId,
+                GenreName = genreList.SingleOrDefault(e => e.Id.Equals(f.GenreId)).Name,
+            })
+            .SingleOrDefault(x => x.Id == id);
         }
 
         public Task<IQueryable<Film>> GetAll()
