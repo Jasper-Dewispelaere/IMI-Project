@@ -1,7 +1,9 @@
 ﻿@page "/films"
 @using Imi.Project.Blazor.Components
 @using Imi.Project.Blazor.Models
-@inject ICRUDService<Film> service;
+@using Imi.Project.Blazor.Services.Mocks
+@inject ICRUDService<Film> filmService;
+@inject ICRUDService<Genre> genreService;
 
 <h3>Films</h3>
 <div>
@@ -36,19 +38,19 @@
 
     public async Task RefreshFilms() 
     { 
-        films = (await service.GetAll()).ToArray(); 
+        films = (await filmService.GetAll()).ToArray(); 
         this.currentFilm = null; 
     }
 
     public async void AddFilm()
     {
-        //this.availableGenres = (await).ToArray();
+        this.availableGenres = (await genreService.GetAll()).ToArray();
         this.currentFilm = new Film();
     }
 
     public async Task EditFilm(Film item)
     {
-        this.currentFilm = await service.Get(item.Id);
+        this.currentFilm = await filmService.Get(item.Id);
     }
 
     public async Task SaveFilm(Film item)
@@ -57,11 +59,11 @@
         {
             if (currentFilm.Id == Guid.Empty)
             {
-                await service.Create(currentFilm);
+                await filmService.Create(currentFilm);
             }
             else
             {
-                await service.Update(currentFilm);
+                await filmService.Update(currentFilm);
             }
             await this.RefreshFilms();
         }
@@ -75,7 +77,7 @@
     {
         try
         {
-            await service.Delete(item.Id);
+            await filmService.Delete(item.Id);
             await this.RefreshFilms();
         }
         catch (Exception ex)
