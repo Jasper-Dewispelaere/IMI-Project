@@ -74,8 +74,8 @@ namespace Imi.Project.Blazor.Services.Mocks
             film.Title = item.Title;
             film.ReleaseYear = item.ReleaseYear;
             film.Image = item.Image;
-            film.DirectorName = item.DirectorName;
-            film.GenreName = item.GenreName;
+            film.DirectorId = item.DirectorId;
+            film.GenreId = item.GenreId;
             return Task.CompletedTask;
         }
     }

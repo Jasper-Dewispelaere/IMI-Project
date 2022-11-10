@@ -24,14 +24,24 @@
 
     <div class="form-group">
         <label for="director">Director: </label>
-        <InputText id="director" @bind-Value="filmItem.DirectorName" class="form-control" />
-        <ValidationMessage For="@(() => filmItem.DirectorName)" />
+        <InputSelect id="director" TValue="Guid" @bind-Value="filmItem.DirectorId" class="form-control">
+            @foreach (var director in AvailableDirectors)
+            {
+                <option value="@director.Id">@director.Name</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="@(() => filmItem.DirectorId)" />
     </div>
 
     <div class="form-group">
         <label for="genre">Genre: </label>
-        <InputText id="genre" @bind-Value="filmItem.GenreName" class="form-control" />
-        <ValidationMessage For="@(() => filmItem.GenreName)" />
+        <InputSelect id="genre" TValue="Guid" @bind-Value="filmItem.GenreId" class="form-control">
+            @foreach (var genre in AvailableGenres)
+            {
+                <option value="@genre.Id">@genre.Name</option>
+            }
+        </InputSelect>
+        <ValidationMessage For="@(() => filmItem.GenreId)" />
     </div>
 
     <button type="submit" class="btn btn-primary" >Save</button>
