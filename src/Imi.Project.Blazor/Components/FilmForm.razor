@@ -42,6 +42,10 @@
     [Parameter]
     public Film filmItem { get; set; }
     [Parameter]
+    public Director[] AvailableDirectors { get; set; } = new Director[0];
+    [Parameter]
+    public Genre[] AvailableGenres { get; set; } = new Genre[0];
+    [Parameter]
     public EventCallback<Film> OnSaveClick { get; set; }
     [Parameter]
     public EventCallback OnCancelClick { get; set; }

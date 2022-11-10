@@ -8,6 +8,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddTransient<ICRUDService<Film>, FilmService>();
 builder.Services.AddTransient<ICRUDService<Genre>, GenreService>();
+builder.Services.AddTransient<ICRUDService<Director>, DirectorService>();
 
 var app = builder.Build();
 

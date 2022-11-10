@@ -4,6 +4,7 @@
 @using Imi.Project.Blazor.Services.Mocks
 @inject ICRUDService<Film> filmService;
 @inject ICRUDService<Genre> genreService;
+@inject ICRUDService<Director> directorService;
 
 <h3>Films</h3>
 <div>
@@ -18,6 +19,8 @@
     else
     {
         <FilmForm filmItem="currentFilm"
+                  AvailableGenres="availableGenres"
+                  AvailableDirectors="availableDirectors"
                   OnSaveClick="SaveFilm"
                   OnCancelClick="RefreshFilms">
         </FilmForm>
@@ -45,11 +48,14 @@
     public async void AddFilm()
     {
         this.availableGenres = (await genreService.GetAll()).ToArray();
+        this.availableDirectors = (await directorService.GetAll()).ToArray();
         this.currentFilm = new Film();
     }
 
     public async Task EditFilm(Film item)
     {
+        this.availableGenres = (await genreService.GetAll()).ToArray();
+        this.availableDirectors = (await directorService.GetAll()).ToArray();
         this.currentFilm = await filmService.Get(item.Id);
     }
 

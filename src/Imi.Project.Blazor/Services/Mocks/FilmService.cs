@@ -6,12 +6,19 @@ namespace Imi.Project.Blazor.Services.Mocks
     public class FilmService : ICRUDService<Film>
     {
         List<Film> filmList = FilmSeeding.GetFilms;
-        List<Genre> genreList = GenreSeeding.GetGenres;
-        List<Director> directorList = DirectorSeeding.GetDirectors;
+        private readonly ICRUDService<Director> directorService;
+        private readonly ICRUDService<Genre> genreService;
+
+        public FilmService(ICRUDService<Director> directorService, ICRUDService<Genre> genreService)
+        {
+            this.directorService = directorService;
+            this.genreService = genreService;
+        }
 
         public async Task<Film> Get(Guid id)
         {
-            //return await Task.FromResult(filmList.SingleOrDefault(x => x.Id == id));
+            var directors = await directorService.GetAll();
+            var genres = await genreService.GetAll();
 
             return filmList.Select(f => new Film
             {
@@ -20,28 +27,29 @@ namespace Imi.Project.Blazor.Services.Mocks
                 Image = f.Image,
                 ReleaseYear = f.ReleaseYear,
                 DirectorId = f.DirectorId,
-                DirectorName = directorList.SingleOrDefault(e => e.Id.Equals(f.DirectorId)).Name,
+                DirectorName = directors.SingleOrDefault(e => e.Id.Equals(f.DirectorId)).Name,
                 GenreId = f.GenreId,
-                GenreName = genreList.SingleOrDefault(e => e.Id.Equals(f.GenreId)).Name,
+                GenreName = genres.SingleOrDefault(e => e.Id.Equals(f.GenreId)).Name,
             })
             .SingleOrDefault(x => x.Id == id);
         }
 
-        public Task<IQueryable<Film>> GetAll()
+        public async Task<IQueryable<Film>> GetAll()
         {
-            return Task.FromResult(
-                filmList.Select(f => new Film()
+            var directors = await directorService.GetAll();
+            var genres = await genreService.GetAll();
+
+            return filmList.Select(f => new Film()
                 {
                     Id = f.Id,
                     Title = f.Title,
                     Image = f.Image,
                     ReleaseYear = f.ReleaseYear,
                     DirectorId = f.DirectorId,
-                    DirectorName = directorList.SingleOrDefault(d => d.Id.Equals(f.DirectorId)).Name,
+                    DirectorName = directors.SingleOrDefault(d => d.Id.Equals(f.DirectorId)).Name,
                     GenreId = f.GenreId,
-                    GenreName = genreList.SingleOrDefault(g => g.Id.Equals(f.GenreId)).Name
-                }).AsQueryable()
-            );
+                    GenreName = genres.SingleOrDefault(e => e.Id.Equals(f.GenreId)).Name
+                }).AsQueryable();
         }
 
         public Task Create(Film item)
