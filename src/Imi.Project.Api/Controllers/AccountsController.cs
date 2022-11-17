@@ -38,8 +38,8 @@ namespace Imi.Project.Api.Controllers
 
             ApplicationUser newUser = new ApplicationUser
             {
+                UserName = registration.Username,
                 Email = registration.Email,
-                UserName = registration.Email,
                 DateOfBirth = registration.DateOfBirth,
                 HasApprovedTermsAndConditions = registration.HasApprovedTermsAndConditions
             };

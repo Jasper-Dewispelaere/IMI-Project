@@ -14,6 +14,10 @@ namespace Imi.Project.Api.Core.DTOs.Accounts
         public string Email { get; set; }
 
         [Required]
+        [StringLength(100)]
+        public string Username { get; set; }
+
+        [Required]
         [StringLength(100, MinimumLength = 6)]
         [DataType(DataType.Password)] 
         public string Password { get; set; }
