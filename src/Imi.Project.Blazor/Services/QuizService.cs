@@ -3,11 +3,11 @@ using Imi.Project.Blazor.Models;
 
 namespace Imi.Project.Blazor.Services
 {
-    public class QuizService : IQuizService<Quiz>
+    public class QuizService : IQuizService<QuizItem>
     {
-        List<Quiz> quizQuestions = QuestionSeeding.GetQuestions;
+        List<QuizItem> quizQuestions = QuestionSeeding.GetQuestions;
 
-        public Task<Quiz[]> GetQuestion()
+        public Task<QuizItem[]> GetQuestion()
         {
             throw new NotImplementedException();
         }

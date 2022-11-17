@@ -4,5 +4,6 @@
     {
         public Guid Id { get; set; }
         public string PossibleAnswer { get; set; }
+        public bool IsRightAnswer { get; set; }
     }
 }
