@@ -10,7 +10,7 @@ namespace Imi.Project.Blazor.Data.Seeding.QuizSeeding
              { 
                  Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), 
                  Question = "In what year did The Shining release?", 
-                 FalseAnswers = new List<Answer>
+                 Answers = new List<Answer>
                     {
                         new Answer() { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), PossibleAnswer = "1981", IsRightAnswer = false },
                         new Answer() { Id = Guid.Parse("00000000-0000-0000-0000-000000000002"), PossibleAnswer = "1984", IsRightAnswer = false },
@@ -22,7 +22,7 @@ namespace Imi.Project.Blazor.Data.Seeding.QuizSeeding
             {
                  Id = Guid.Parse("00000000-0000-0000-0000-000000000002"),
                  Question = "Who directed Titanic?",
-                 FalseAnswers = new List<Answer>
+                 Answers = new List<Answer>
                     {
                         new Answer() { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), PossibleAnswer = "Todd Philips", IsRightAnswer = false },
                         new Answer() { Id = Guid.Parse("00000000-0000-0000-0000-000000000002"), PossibleAnswer = "Steven Spielberg", IsRightAnswer = false },
@@ -34,7 +34,7 @@ namespace Imi.Project.Blazor.Data.Seeding.QuizSeeding
             {
                  Id = Guid.Parse("00000000-0000-0000-0000-000000000003"),
                  Question = "Which one of these films is not a comedy?",
-                 FalseAnswers = new List<Answer>
+                 Answers = new List<Answer>
                     {
                         new Answer() { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), PossibleAnswer = "The Imitation Game", IsRightAnswer = true },
                         new Answer() { Id = Guid.Parse("00000000-0000-0000-0000-000000000002"), PossibleAnswer = "The Hangover", IsRightAnswer = false },
