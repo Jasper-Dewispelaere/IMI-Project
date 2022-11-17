@@ -207,3 +207,8 @@ app {
     font-size: 30px;
     margin: 7px;
 }
+.quizContainer {
+    display: flow;
+    justify-content: center;
+    text-align: center;
+}

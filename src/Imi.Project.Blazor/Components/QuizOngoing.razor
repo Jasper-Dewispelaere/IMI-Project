@@ -1,5 +1,8 @@
-﻿<h3>QuizOngoing</h3>
+﻿<div>
+    <button class="btn btn-danger" @onclick="OnStop">Stop Quiz</button>
+</div>
 
 @code {
-
+    [Parameter]
+    public EventCallback OnStop { get; set; }
 }
