@@ -2,6 +2,6 @@
 {
     public interface IQuizService<T>
     {
-        Task<T[]> GetQuestion();
+        T GetQuestion();
     }
 }

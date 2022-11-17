@@ -6,10 +6,14 @@ namespace Imi.Project.Blazor.Services
     public class QuizService : IQuizService<QuizItem>
     {
         List<QuizItem> quizQuestions = QuestionSeeding.GetQuestions;
+        Random random = new Random();
 
-        public Task<QuizItem[]> GetQuestion()
+        public QuizItem GetQuestion()
         {
-            throw new NotImplementedException();
+            var amountOfQuestions = quizQuestions.Count();
+            var Numberquestion = random.Next(amountOfQuestions);
+            var question = quizQuestions[Numberquestion];
+            return question;
         }
     }
 }
