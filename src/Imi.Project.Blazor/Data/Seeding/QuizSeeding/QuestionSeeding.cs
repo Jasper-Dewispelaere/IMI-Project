@@ -30,6 +30,18 @@ namespace Imi.Project.Blazor.Data.Seeding.QuizSeeding
                         new Answer() { Id = Guid.Parse("00000000-0000-0000-0000-000000000004"), PossibleAnswer = "Robert Zemeckis", IsRightAnswer = false }
                     }
             },
+            new QuizItem()
+            {
+                 Id = Guid.Parse("00000000-0000-0000-0000-000000000003"),
+                 Question = "Which one of these films is not a comedy?",
+                 FalseAnswers = new List<Answer>
+                    {
+                        new Answer() { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), PossibleAnswer = "The Imitation Game", IsRightAnswer = true },
+                        new Answer() { Id = Guid.Parse("00000000-0000-0000-0000-000000000002"), PossibleAnswer = "The Hangover", IsRightAnswer = false },
+                        new Answer() { Id = Guid.Parse("00000000-0000-0000-0000-000000000003"), PossibleAnswer = "The Grand Budapest Hotel", IsRightAnswer = false },
+                        new Answer() { Id = Guid.Parse("00000000-0000-0000-0000-000000000004"), PossibleAnswer = "Home Alone", IsRightAnswer = false }
+                    }
+            },
             //TODO: STILL NEED TO ADD MORE
         };
 

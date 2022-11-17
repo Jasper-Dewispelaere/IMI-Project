@@ -1,0 +1,10 @@
+﻿<div class="container">
+    <h1>Welcome to the Film Quiz</h1>
+    <p>Click the play button to start</p>
+    <button class="btn btn-primary" @onclick="OnStart">START</button>
+</div>
+
+@code {
+    [Parameter]
+    public EventCallback OnStart { get; set; }
+}

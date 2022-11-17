@@ -1,6 +1,21 @@
 ﻿@page "/quiz"
-<h3>Quiz</h3>
+
+@if (quizStarted == false) 
+{ 
+    <QuizStart OnStart="Start">
+    </QuizStart>
+}
+else
+{
+    <QuizOngoing>
+    </QuizOngoing>
+}
 
 @code {
+    private bool quizStarted = false;
 
+    public async void Start()
+    {
+        this.quizStarted = true;
+    }
 }
