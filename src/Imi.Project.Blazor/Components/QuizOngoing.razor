@@ -1,8 +1,12 @@
-﻿<div>
+﻿@using Imi.Project.Blazor.Models.Quiz
+<div>
     <button class="btn btn-danger" @onclick="OnStop">Stop Quiz</button>
+    <p>@Question.Question</p>
 </div>
 
 @code {
+    [Parameter]
+    public QuizItem Question { get; set; }
     [Parameter]
     public EventCallback OnStop { get; set; }
 }

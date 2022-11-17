@@ -1,4 +1,6 @@
 ﻿@page "/quiz"
+@using Imi.Project.Blazor.Models.Quiz
+@inject IQuizService<QuizItem> quizService;
 
 @if (quizStarted == false) 
 { 
@@ -7,17 +9,27 @@
 }
 else
 {
-    <QuizOngoing OnStop="Stop">
+    <QuizOngoing Question="quizItem"
+        OnStop="Stop">
     </QuizOngoing>
 }
 
 @code {
+    private QuizItem quizItem;
     private bool quizStarted = false;
 
     public void Start()
     {
         this.quizStarted = true;
+        quizItem = quizService.GetQuestion();
+        //GetNewQuestion();
+
     }
+
+    //public Task GetNewQuestion()
+    //{
+    //    quizItem = quizService.GetQuestion();
+    //}
 
     public void Stop()
     {
