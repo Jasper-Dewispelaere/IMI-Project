@@ -1,5 +1,5 @@
 ﻿using Imi.Project.Blazor.Data.Seeding.QuizSeeding;
-using Imi.Project.Blazor.Models;
+using Imi.Project.Blazor.Models.Quiz;
 
 namespace Imi.Project.Blazor.Services
 {
