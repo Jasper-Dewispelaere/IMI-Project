@@ -7,11 +7,48 @@
 </div>
 
 <div id="app">
+    @*<div class="card col-md-3 p-2 m-1" v-for="film in films">
+        <div class="card-body">
+            <h5 class="card-title">{{film.title}}</h5>
+        </div>
+    </div>*@
+
+    <div class="card bg-dark text-white" style="width: 18rem; height: 18rem;" v-for="film in films">
+        <img :src="film.image" class="card-img" :alt="film.image">
+        <div class="card-img-overlay">
+            <h5 class="card-title">{{film.title}}</h5>
+            <p class="card-text">{{film.releaseYear}}</p>
+            <p class="card-text">{{film.director}}</p>
+        </div>
+    </div>
 
 </div>
 
-@section scripts{
-    
+@section Scripts{
+    <script src="~/lib/vue/vue.js"></script> <script src="~/lib/axios/axios.min.js"></script>
 
-
+    <script>
+    var app = new Vue({ 
+        el: '#app', 
+        data: { 
+            films: null, 
+            currentFilm: null
+        },
+        created: function () {
+            this.showFilms();
+        },
+        methods:{
+            showFilms: async function() {
+                await axios.get(`${baseUrl}films`)
+                    .then((response) => {
+                        this.films = response.data
+                    })
+                    .catch((e) => {
+                        this.showErrorSection = true;
+                        this.errorMessage = e.message
+                    })
+            }
+        },
+    });
+    </script>
 }
