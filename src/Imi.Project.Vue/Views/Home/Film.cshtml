@@ -7,21 +7,30 @@
 </div>
 
 <div id="app">
-    @*<div class="card col-md-3 p-2 m-1" v-for="film in films">
-        <div class="card-body">
-            <h5 class="card-title">{{film.title}}</h5>
-        </div>
+    @*<div class="" v-if="isLoading">
+        <div class="d-flex justify-content-center">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
     </div>*@
-
-    <div class="card bg-dark text-white" style="width: 18rem; height: 18rem;" v-for="film in films">
-        <img :src="film.image" class="card-img" :alt="film.image">
-        <div class="card-img-overlay">
-            <h5 class="card-title">{{film.title}}</h5>
-            <p class="card-text">{{film.releaseYear}}</p>
-            <p class="card-text">{{film.director}}</p>
+    <div class="row">
+    <div class="card mb-3" style="max-width: 350px; margin:5px;" v-for="film in films">
+        <div class="row no-gutters">
+            <div class="col-md-4">
+                <img :src="film.image" class="card-img" :alt="film.image">
+            </div>
+            <div class="col-md-7">
+                <div class="card-body">
+                        <h5 class="card-title">{{film.title}}</h5>
+                        <p class="card-text">{{film.releaseYear}}</p>
+                        <p class="card-text">{{film.director.name}}</p>
+                        <p class="card-text">{{film.genre.name}}</p>
+                        <button type="button" class="btn btn-light">Meer info</button>
+                </div>
+            </div>
         </div>
     </div>
-
+    </div>
 </div>
 
 @section Scripts{
@@ -32,7 +41,8 @@
         el: '#app', 
         data: { 
             films: null, 
-            currentFilm: null
+            currentFilm: null,
+            isLoading: false
         },
         created: function () {
             this.showFilms();
@@ -47,6 +57,9 @@
                         this.showErrorSection = true;
                         this.errorMessage = e.message
                     })
+                    .finally(() => {
+                        this.isLoading = false;
+                    });
             }
         },
     });
