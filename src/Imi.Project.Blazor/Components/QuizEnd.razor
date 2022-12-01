@@ -1,0 +1,12 @@
+﻿<div class="container">
+    <h1>Thank you for playing!</h1>
+    <h3>Your final score was: @EndScore</h3>
+    <button class="btn btn-primary" @onclick="PlayAgain">Play Again?</button>
+</div>
+
+@code {
+    [Parameter]
+    public int EndScore { get; set; }
+    [Parameter]
+    public EventCallback PlayAgain { get; set; }
+}

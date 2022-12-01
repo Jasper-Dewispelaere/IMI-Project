@@ -7,14 +7,17 @@
     <QuizStart OnStart="Start">
     </QuizStart>
 }
-else if(quizStarted == true && quizProgress == 5)
+else if(quizStarted == true && quizProgress == 6)
 {
-    
+    <QuizEnd EndScore="quizScore"
+        PlayAgain="PlayAgain">
+    </QuizEnd>
 }
 else
 {
     <QuizOngoing Question="quizItem"
              Score="quizScore"
+             Progress="quizProgress"
              OnStop="Stop"
              OnAnswer="CheckAnswer">
     </QuizOngoing>
@@ -24,7 +27,7 @@ else
     private QuizItem quizItem;
     private bool quizStarted = false;
     private int quizScore = 0;
-    private int quizProgress = 0;
+    private int quizProgress = 1;
 
     public void Start()
     {
@@ -47,8 +50,15 @@ else
     public void Stop()
     {
         quizScore = 0;
-        quizProgress = 0;
+        quizProgress = 1;
         this.quizStarted = false;
+    }
+
+    public void PlayAgain()
+    {
+        quizScore = 0;
+        quizProgress = 1;
+        this.quizStarted = true;
     }
 
     public void CheckAnswer(Answer answer)
