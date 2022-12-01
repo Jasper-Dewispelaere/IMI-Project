@@ -1,12 +1,13 @@
 ﻿@using Imi.Project.Blazor.Models.Quiz
 <div class="container">
+    <h3>Score: @Score/5</h3>
     <button class="btn btn-danger" style="position: absolute;top: 0;right: 0; margin:10px;" @onclick="OnStop">Stop Quiz</button>
     <h2 class="question">@Question.Question</h2>
     <div class="answers">
-        <button class="btn btn-light">@Question.Answers[0].PossibleAnswer</button>
-        <button class="btn btn-light">@Question.Answers[1].PossibleAnswer</button><br>
-        <button class="btn btn-light">@Question.Answers[2].PossibleAnswer</button>
-        <button class="btn btn-light">@Question.Answers[3].PossibleAnswer</button>
+        <button class="btn btn-light" @onclick="a => OnAnswer.InvokeAsync(Question.Answers[0])">@Question.Answers[0].PossibleAnswer</button>
+        <button class="btn btn-light" @onclick="a => OnAnswer.InvokeAsync(Question.Answers[1])">@Question.Answers[1].PossibleAnswer</button><br>
+        <button class="btn btn-light" @onclick="a => OnAnswer.InvokeAsync(Question.Answers[2])">@Question.Answers[2].PossibleAnswer</button>
+        <button class="btn btn-light" @onclick="a => OnAnswer.InvokeAsync(Question.Answers[3])">@Question.Answers[3].PossibleAnswer</button>
     </div>
 </div>
 
@@ -14,5 +15,9 @@
     [Parameter]
     public QuizItem Question { get; set; }
     [Parameter]
+    public int Score { get; set; }
+    [Parameter]
     public EventCallback OnStop { get; set; }
+    [Parameter]
+    public EventCallback<Answer> OnAnswer { get; set; }
 }

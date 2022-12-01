@@ -7,32 +7,62 @@
     <QuizStart OnStart="Start">
     </QuizStart>
 }
+else if(quizStarted == true && quizProgress == 5)
+{
+    
+}
 else
 {
     <QuizOngoing Question="quizItem"
-        OnStop="Stop">
+             Score="quizScore"
+             OnStop="Stop"
+             OnAnswer="CheckAnswer">
     </QuizOngoing>
 }
 
 @code {
     private QuizItem quizItem;
     private bool quizStarted = false;
+    private int quizScore = 0;
+    private int quizProgress = 0;
 
     public void Start()
     {
         this.quizStarted = true;
         quizItem = quizService.GetQuestion();
-        //GetNewQuestion();
-
     }
 
-    //public Task GetNewQuestion()
-    //{
-    //    quizItem = quizService.GetQuestion();
-    //}
+    public void NextQuestion()
+    {
+        if (quizProgress == 5)
+        {
+
+        }
+        else 
+        {
+            quizItem = quizService.GetQuestion();
+        }
+    }
 
     public void Stop()
     {
+        quizScore = 0;
+        quizProgress = 0;
         this.quizStarted = false;
+    }
+
+    public void CheckAnswer(Answer answer)
+    {
+        if (answer.IsRightAnswer == false)
+        {
+            quizProgress++;
+            NextQuestion();
+        }
+        else 
+        {
+            quizScore++;
+            quizProgress++;
+            NextQuestion();
+        }
     }
 }

@@ -15,7 +15,7 @@ namespace Imi.Project.Blazor.Data.Seeding.QuizSeeding
                         new Answer() { Id = Guid.Parse("00000000-0000-0000-0000-000000000001"), PossibleAnswer = "1981", IsRightAnswer = false },
                         new Answer() { Id = Guid.Parse("00000000-0000-0000-0000-000000000002"), PossibleAnswer = "1984", IsRightAnswer = false },
                         new Answer() { Id = Guid.Parse("00000000-0000-0000-0000-000000000003"), PossibleAnswer = "1980", IsRightAnswer = true },
-                        new Answer() { Id = Guid.Parse("00000000-0000-0000-0000-000000000004"), PossibleAnswer = "1979", IsRightAnswer = false },
+                        new Answer() { Id = Guid.Parse("00000000-0000-0000-0000-000000000004"), PossibleAnswer = "1979", IsRightAnswer = false }
                     }
             },
             new QuizItem()
