@@ -37,14 +37,7 @@ else
 
     public void NextQuestion()
     {
-        if (quizProgress == 5)
-        {
-
-        }
-        else 
-        {
-            quizItem = quizService.GetQuestion();
-        }
+        quizItem = quizService.GetQuestion();
     }
 
     public void Stop()
