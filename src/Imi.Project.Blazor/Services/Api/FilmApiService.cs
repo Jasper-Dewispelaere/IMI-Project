@@ -4,6 +4,7 @@ namespace Imi.Project.Blazor.Services.Api
 {
     public class FilmApiService : ICRUDService<Film>
     {
+
         public Task Create(Film item)
         {
             throw new NotImplementedException();
