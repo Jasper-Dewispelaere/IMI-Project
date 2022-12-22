@@ -1,6 +1,7 @@
 ﻿using Imi.Project.Blazor.Data;
 using Imi.Project.Blazor.DTOs;
 using Imi.Project.Blazor.Models;
+using Imi.Project.Blazor.Pages;
 
 namespace Imi.Project.Blazor.Services.Api
 {
@@ -16,7 +17,7 @@ namespace Imi.Project.Blazor.Services.Api
 
         public async Task<Film> Get(Guid id)
         {
-            var dto = await _httpClient.GetFromJsonAsync<FilmDto>($"{baseUrl}/{id}");
+            var dto = await _httpClient.GetFromJsonAsync<FilmDto>($"{baseUrl}/Films/{id}");
             return new Film
             {
                 Id = dto.Id,
@@ -30,24 +31,63 @@ namespace Imi.Project.Blazor.Services.Api
             };
         }
 
-        public Task<IQueryable<Film>> GetAll()
+        public async Task<IQueryable<Film>> GetAll()
         {
-            throw new NotImplementedException();
+            var dtos = await _httpClient.GetFromJsonAsync<FilmDto[]>($"{baseUrl}/Films");
+            return dtos.Select(dto => new Film
+            {
+                Id = dto.Id,
+                Title = dto.Title,
+                Image = dto.Image,
+                ReleaseYear = dto.ReleaseYear,
+                DirectorId = dto.Director.Id,
+                DirectorName = dto.Director.Name,
+                GenreId = dto.Genre.Id,
+                GenreName = dto.Genre.Name,
+            }).AsQueryable();
         }
 
         public Task Create(Film item)
         {
-            throw new NotImplementedException();
+            var dto = new FilmDto
+            {
+                Title = item.Title,
+                Image = item.Image,
+                ReleaseYear = item.ReleaseYear,
+                Genre = new GenreDto
+                {
+                    Id = item.GenreId
+                },
+                Director = new DirectorDto
+                { 
+                    Id = item.DirectorId 
+                }
+            };
+            return _httpClient.PostAsJsonAsync<FilmDto>($"{baseUrl}/Films", dto);
         }
 
         public Task Delete(Guid id)
         {
-            throw new NotImplementedException();
+            return _httpClient.DeleteAsync($"{baseUrl}/Films/{id}");
         }
 
         public Task Update(Film item)
         {
-            throw new NotImplementedException();
+            var dto = new FilmDto
+            {
+                Title = item.Title,
+                Image = item.Image,
+                ReleaseYear = item.ReleaseYear,
+                Genre = new GenreDto
+                {
+                    Id = item.GenreId
+                },
+                Director = new DirectorDto
+                {
+                    Id = item.DirectorId
+                }
+            };
+            return _httpClient.PutAsJsonAsync<FilmDto>($"{baseUrl}/Films/{item.Id}", dto);
         }
     }
 }
