@@ -8,9 +8,7 @@ namespace Imi.Project.Blazor.DTOs
         public string Title { get; set; }
         public string Image { get; set; }
         public int ReleaseYear { get; set; }
-        public Guid DirectorId { get; set; }
-        public string DirectorName { get; set; }
-        public Guid GenreId { get; set; }
-        public string GenreName { get; set; }
+        public GenreDto Genre { get; set; }
+        public DirectorDto Director { get; set; }
     }
 }
