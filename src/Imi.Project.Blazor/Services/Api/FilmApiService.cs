@@ -2,12 +2,13 @@
 using Imi.Project.Blazor.DTOs;
 using Imi.Project.Blazor.Models;
 using Imi.Project.Blazor.Pages;
+using System.Text.Json;
 
 namespace Imi.Project.Blazor.Services.Api
 {
     public class FilmApiService : ICRUDService<Film>
     {
-        string baseUrl = Config.Url;
+        private string baseUrl = Config.Url;
         private readonly HttpClient _httpClient = null;
 
         public FilmApiService(HttpClient httpClient)
