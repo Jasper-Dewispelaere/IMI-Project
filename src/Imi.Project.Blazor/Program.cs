@@ -3,6 +3,7 @@ using Imi.Project.Blazor.Models.Quiz;
 using Imi.Project.Blazor.Services;
 using Imi.Project.Blazor.Services.Api;
 using Imi.Project.Blazor.Services.Mocks;
+using Imi.Project.Blazor.Services.Quiz;
 
 var builder = WebApplication.CreateBuilder(args);
 

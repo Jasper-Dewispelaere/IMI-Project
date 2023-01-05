@@ -1,7 +1,7 @@
 ﻿using Imi.Project.Blazor.Data.Seeding.QuizSeeding;
 using Imi.Project.Blazor.Models.Quiz;
 
-namespace Imi.Project.Blazor.Services
+namespace Imi.Project.Blazor.Services.Quiz
 {
     public class QuizService : IQuizService<QuizItem>
     {
