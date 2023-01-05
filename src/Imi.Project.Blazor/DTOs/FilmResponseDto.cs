@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Imi.Project.Blazor.DTOs
 {
-    public class FilmDto
+    public class FilmResponseDto
     {
         [JsonPropertyName("id")]
         public Guid Id { get; set; }

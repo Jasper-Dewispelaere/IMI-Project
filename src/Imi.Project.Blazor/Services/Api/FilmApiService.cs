@@ -18,7 +18,7 @@ namespace Imi.Project.Blazor.Services.Api
 
         public async Task<Film> Get(Guid id)
         {
-            var dto = await _httpClient.GetFromJsonAsync<FilmDto>($"{baseUrl}/Films/{id}");
+            var dto = await _httpClient.GetFromJsonAsync<FilmResponseDto>($"{baseUrl}/Films/{id}");
             return new Film
             {
                 Id = dto.Id,
@@ -34,7 +34,7 @@ namespace Imi.Project.Blazor.Services.Api
 
         public async Task<IQueryable<Film>> GetAll()
         {
-            var dtos = await _httpClient.GetFromJsonAsync<FilmDto[]>($"{baseUrl}/Films");
+            var dtos = await _httpClient.GetFromJsonAsync<FilmResponseDto[]>($"{baseUrl}/Films");
             return dtos.Select(dto => new Film
             {
                 Id = dto.Id,
