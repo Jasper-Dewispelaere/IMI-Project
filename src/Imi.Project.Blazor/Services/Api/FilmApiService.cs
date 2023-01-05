@@ -50,21 +50,16 @@ namespace Imi.Project.Blazor.Services.Api
 
         public Task Create(Film item)
         {
-            var dto = new FilmDto
+            var dto = new FilmRequestDto
             {
+                Id = Guid.NewGuid(),
                 Title = item.Title,
                 Image = item.Image,
                 ReleaseYear = item.ReleaseYear,
-                Genre = new GenreDto
-                {
-                    Id = item.GenreId
-                },
-                Director = new DirectorDto
-                { 
-                    Id = item.DirectorId 
-                }
+                GenreId = item.GenreId,
+                DirectorId = item.DirectorId
             };
-            return _httpClient.PostAsJsonAsync<FilmDto>($"{baseUrl}/Films", dto);
+            return _httpClient.PostAsJsonAsync($"{baseUrl}/Films", dto);
         }
 
         public Task Delete(Guid id)
@@ -74,21 +69,16 @@ namespace Imi.Project.Blazor.Services.Api
 
         public Task Update(Film item)
         {
-            var dto = new FilmDto
+            var dto = new FilmRequestDto
             {
+                Id = item.Id,
                 Title = item.Title,
                 Image = item.Image,
                 ReleaseYear = item.ReleaseYear,
-                Genre = new GenreDto
-                {
-                    Id = item.GenreId
-                },
-                Director = new DirectorDto
-                {
-                    Id = item.DirectorId
-                }
+                GenreId = item.GenreId,
+                DirectorId = item.DirectorId
             };
-            return _httpClient.PutAsJsonAsync<FilmDto>($"{baseUrl}/Films/{item.Id}", dto);
+            return _httpClient.PutAsJsonAsync($"{baseUrl}/Films", dto);
         }
     }
 }
