@@ -1,5 +1,6 @@
 ﻿using Imi.Project.Blazor.Data.Seeding.QuizSeeding;
 using Imi.Project.Blazor.Models.Quiz;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Imi.Project.Blazor.Services.Quiz
 {
