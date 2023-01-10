@@ -83,3 +83,7 @@ body {
 .card-title {
     font-weight: bold;
 }
+.card-Buttons {
+    display: inline-block;
+    margin-top: 10px;
+}

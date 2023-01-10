@@ -2,10 +2,6 @@
     ViewData["Title"] = "Film";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Films</h1>
-</div>
-
 <div id="app">
     <div class="" v-if="isLoading">
         <div class="d-flex justify-content-center">
@@ -16,19 +12,43 @@
     </div>
 
     <div v-else>
-        <div class="row">
-            <div class="card mb-3" style="max-width: 350px; margin:5px;" v-for="film in films">
-                <div class="row no-gutters">
-                    <div class="col-md-4">
-                        <img :src="film.image" class="card-img" :alt="film.image">
+        <div v-if="showAllFilmsSection">
+            <div class="row">
+                <div class="card mb-3" style="max-width: 350px; margin:5px;" v-for="film in films">
+                    <div class="row no-gutters">
+                        <div class="col-md-4">
+                            <img :src="film.image" class="card-img" :alt="film.image">
+                        </div>
+                        <div class="col-md-7">
+                            <div class="card-body">
+                                    <h5 class="card-title">{{film.title}}</h5>
+                                    <p class="card-text">{{film.releaseYear}}</p>
+                                    <p class="card-text">{{film.director.name}}</p>
+                                    <p class="card-text">{{film.genre.name}}</p>
+                                    <button type="button" class="btn btn-light" v-on:click="GetFilmDetails(film)">Meer info</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-7">
+                </div>
+            </div>
+        </div>
+        <div v-if="showFilmDetailSection">
+            <div class="row">
+                <div class="col-md-4 card" style="height: 525px">
+                    <img class="card-img" style="width: auto; height: auto; padding: 5px;" v-bind:src="filmDetail.image" alt="filmDetail.image" />
+                </div>
+                <div class="col-md-8">
+                    <div class="card">
                         <div class="card-body">
-                                <h5 class="card-title">{{film.title}}</h5>
-                                <p class="card-text">{{film.releaseYear}}</p>
-                                <p class="card-text">{{film.director.name}}</p>
-                                <p class="card-text">{{film.genre.name}}</p>
-                                <button type="button" class="btn btn-light" v-on:click="GetFilmDetails(film)">Meer info</button>
+                            <h2 class="card-title">{{filmDetail.title}}</h2>
+                            <p><b>Jaar van uitgave:</b> {{filmDetail.releaseYear}}</p>
+                            <p><b>Genre:</b> {{filmDetail.genre.name}}</p>
+                            <p class="mb-1"><b>Regisseur:</b> {{filmDetail.director.name}}</p>
+                            <div class="cardButtons">
+                                <a href="#" class="btn btn-warning" style="margin: 15px 5px 0px 0px;" v-on:click="showFilms">Edit</a>
+                                <a href="#" class="btn btn-danger" style="margin: 15px 5px 0px 0px;" v-on:click="showFilms">Delete</a>
+                                <a href="#" class="btn btn-secondary" style="margin: 15px 5px 0px 0px;" v-on:click="showFilms">Terug</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -42,29 +62,48 @@
     var app = new Vue({ 
         el: '#app', 
         data: { 
+            showAllFilmsSection: false,
+            showFilmDetailSection: false,
             films: null, 
-            currentFilm: null,
-            isLoading: true
+            isLoading: true,
+            filmDetail: null
         },
         created: function () {
             this.showFilms();
         },
         methods:{
             showFilms: async function() {
-                await axios.get(`${baseUrl}films`)
-                    .then((response) => {
-                        this.films = response.data
-                    })
-                    .catch((e) => {
-                        this.showErrorSection = true;
-                        this.errorMessage = e.message
-                    })
-                    .finally(() => {
-                        this.isLoading = false;
-                    });
+                    this.isLoading = true;
+                    await axios.get(`${baseUrl}films`)
+                        .then((response) => {
+                            this.films = response.data;
+                            
+                        })
+                        .catch((e) => {
+                            this.showErrorSection = true;
+                            this.errorMessage = e.message
+                        })
+                        .finally(() => {
+                            this.isLoading = false;
+                        });
+                    this.showAllFilmsSection= true;
+                    this.showFilmDetailSection= false;
             },
             GetFilmDetails: async function(film) {
-                
+                    this.isLoading = true;
+                    await axios.get(`${baseUrl}films/${film.id}`)
+                        .then((response) => {
+                            this.filmDetail = response.data;
+                        })
+                        .catch((e) => {
+                            this.showErrorSection = true;
+                            this.errorMessage = e.message
+                        })
+                        .finally(() => {
+                            this.isLoading = false;
+                        });
+                    this.showAllFilmsSection = false;
+                    this.showFilmDetailSection = true;
             }
         },
     });
