@@ -46,7 +46,7 @@
                             <p class="mb-1"><b>Regisseur:</b> {{filmDetail.director.name}}</p>
                             <div class="cardButtons">
                                 <a href="#" class="btn btn-warning" style="margin: 15px 5px 0px 0px;" v-on:click="showFilms">Edit</a>
-                                <a href="#" class="btn btn-danger" style="margin: 15px 5px 0px 0px;" v-on:click="showFilms">Delete</a>
+                                <a href="#" class="btn btn-danger" style="margin: 15px 5px 0px 0px;" v-on:click="deleteFilm(filmDetail)">Delete</a>
                                 <a href="#" class="btn btn-secondary" style="margin: 15px 5px 0px 0px;" v-on:click="showFilms">Terug</a>
                             </div>
                         </div>
@@ -104,6 +104,30 @@
                         });
                     this.showAllFilmsSection = false;
                     this.showFilmDetailSection = true;
+            },
+            showEditForm: async function(film) {
+                this.isLoading = true;
+            },
+            deleteFilm: async function (filmToDelete) {
+                this.isLoading = true;
+                let self = this;
+                await axios.delete(`${baseUrl}films/${filmToDelete.id}`)
+                    .then((response) => {
+                        self.films.forEach(function (film, i) {
+                            if (film.id === filmToDelete.id) {
+                                self.films.splice(i, 1);
+                            }
+                        });
+                    })
+                    .catch((e) => {
+                        this.showErrorSection = true;
+                        this.errorMessage = e.message
+                    })
+                    .finally(() => {
+                        this.isLoading = false;
+                    });
+                this.showAllFilmsSection = true;
+                this.showFilmDetailSection = false;
             }
         },
     });
