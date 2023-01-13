@@ -45,13 +45,42 @@
                             <p><b>Genre:</b> {{filmDetail.genre.name}}</p>
                             <p class="mb-1"><b>Regisseur:</b> {{filmDetail.director.name}}</p>
                             <div class="cardButtons">
-                                <a href="#" class="btn btn-warning" style="margin: 15px 5px 0px 0px;" v-on:click="showFilms">Edit</a>
-                                <a href="#" class="btn btn-danger" style="margin: 15px 5px 0px 0px;" v-on:click="deleteFilm(filmDetail)">Delete</a>
-                                <a href="#" class="btn btn-secondary" style="margin: 15px 5px 0px 0px;" v-on:click="showFilms">Terug</a>
+                                <a class="btn btn-warning" style="margin: 15px 5px 0px 0px;" v-on:click="showEditForm">Edit</a>
+                                <a class="btn btn-danger" style="margin: 15px 5px 0px 0px;" v-on:click="deleteFilm(filmDetail)">Delete</a>
+                                <a class="btn btn-secondary" style="margin: 15px 5px 0px 0px;" v-on:click="showFilms">Terug</a>
                             </div>
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div v-if="showFilmEditSection">
+            <p>{{filmDetail.title}}</p>
+            <div class="form-group">
+                <label for="title">Title: </label>
+                <input type="text" id="title" v-model="filmDetail.title" placeholder="title" class="form-control" />
+                <ValidationMessage For="() => filmDetail.title" />
+            </div>
+
+            <div class="form-group">
+                <label for="image">Image (Url): </label>
+                <input type="url" id="image" v-model="filmDetail.image" placeholder="image(url)" class="form-control" />
+                <ValidationMessage For="() => filmDetail.image" />
+            </div>
+
+            <div class="form-group">
+                <label for="releaseYear">Release Year: </label>
+                <input type="number" id="releaseYear" v-model="filmDetail.releaseYear" placeholder="Release Year" class="form-control" />
+                <ValidationMessage For="() => filmDetail.releaseYear" />
+            </div>
+
+            <div class="form-group">
+                <label for="director">Director: </label>
+                <select v-for="">
+                    <option></option>
+                </select>
+                <input type="number" id="releaseYear" v-model="filmDetail.releaseYear" placeholder="Release Year" class="form-control" />
+                <ValidationMessage For="() => filmDetail.releaseYear" />
             </div>
         </div>
     </div>
@@ -64,7 +93,10 @@
         data: { 
             showAllFilmsSection: false,
             showFilmDetailSection: false,
-            films: null, 
+            showFilmEditSection: false,
+            films: null,
+            directors: null,
+            genres: null,
             isLoading: true,
             filmDetail: null
         },
@@ -72,22 +104,60 @@
             this.showFilms();
         },
         methods:{
+            GetFilms: async function () {
+                this.showErrorSection = false;
+                let self = this;
+
+                await axios.get(`${baseUrl}films`)
+                    .then((response) => {
+                    self.films = response.data;
+                    })
+                    .catch((e) => {
+                        this.showErrorSection = true;
+                        this.errorMessage = e.message
+                    })
+                    .finally(() => {
+                        this.isLoading = false;
+                    });
+            },
+            GetDirectors: async function () {
+                this.showErrorSection = false;
+                let self = this;
+
+                await axios.get(`${baseUrl}directors`)
+                    .then((response) => {
+                    self.directors = response.data;
+                    })
+                    .catch((e) => {
+                        this.showErrorSection = true;
+                        this.errorMessage = e.message
+                    })
+                    .finally(() => {
+                        this.isLoading = false;
+                    });
+            },
+            GetGenres: async function () {
+                this.showErrorSection = false;
+                let self = this;
+
+                await axios.get(`${baseUrl}genres`)
+                    .then((response) => {
+                    self.genres = response.data;
+                    })
+                    .catch((e) => {
+                        this.showErrorSection = true;
+                        this.errorMessage = e.message
+                    })
+                    .finally(() => {
+                        this.isLoading = false;
+                    });
+            },
             showFilms: async function() {
                     this.isLoading = true;
-                    await axios.get(`${baseUrl}films`)
-                        .then((response) => {
-                            this.films = response.data;
-                            
-                        })
-                        .catch((e) => {
-                            this.showErrorSection = true;
-                            this.errorMessage = e.message
-                        })
-                        .finally(() => {
-                            this.isLoading = false;
-                        });
+                    await this.GetFilms();
                     this.showAllFilmsSection= true;
                     this.showFilmDetailSection= false;
+                    this.showFilmEditSection = false;
             },
             GetFilmDetails: async function(film) {
                     this.isLoading = true;
@@ -104,8 +174,18 @@
                         });
                     this.showAllFilmsSection = false;
                     this.showFilmDetailSection = true;
+                    this.showFilmEditSection = false;
             },
-            showEditForm: async function(film) {
+            showAddForm: async function(film) {
+                this.isLoading = true;
+            },
+            showEditForm: async function() {
+                //await this.GetFilms();
+                this.showAllFilmsSection= false;
+                this.showFilmDetailSection= false;
+                this.showFilmEditSection = true;
+            },
+            editFilm: async function (filmToEdit){
                 this.isLoading = true;
             },
             deleteFilm: async function (filmToDelete) {
@@ -128,6 +208,7 @@
                     });
                 this.showAllFilmsSection = true;
                 this.showFilmDetailSection = false;
+                this.showFilmEditSection = false;
             }
         },
     });
