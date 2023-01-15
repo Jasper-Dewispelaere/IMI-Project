@@ -12,7 +12,9 @@
     </div>
 
     <div v-else>
+        <!-- All films -->
         <div v-if="showAllFilmsSection">
+            @*<button class="btn btn-primary" style="position: absolute;top: 0;right: 0; margin:10px;" v-on:click="showAddForm">Add Film</button>*@
             <div class="row">
                 <div class="card mb-3" style="max-width: 350px; margin:5px;" v-for="film in films">
                     <div class="row no-gutters">
@@ -25,13 +27,14 @@
                                     <p class="card-text">{{film.releaseYear}}</p>
                                     <p class="card-text">{{film.director.name}}</p>
                                     <p class="card-text">{{film.genre.name}}</p>
-                                    <button type="button" class="btn btn-light" v-on:click="GetFilmDetails(film)">Meer info</button>
+                                    <button type="button" class="btn btn-light" v-on:click="GetFilmDetails(film)">More info</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- Film detail -->
         <div v-if="showFilmDetailSection">
             <div class="row">
                 <div class="col-md-4 card" style="height: 525px">
@@ -47,41 +50,47 @@
                             <div class="cardButtons">
                                 <a class="btn btn-warning" style="margin: 15px 5px 0px 0px;" v-on:click="showEditForm">Edit</a>
                                 <a class="btn btn-danger" style="margin: 15px 5px 0px 0px;" v-on:click="deleteFilm(filmDetail)">Delete</a>
-                                <a class="btn btn-secondary" style="margin: 15px 5px 0px 0px;" v-on:click="showFilms">Terug</a>
+                                <a class="btn btn-secondary" style="margin: 15px 5px 0px 0px;" v-on:click="showFilms">Back</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        <!-- Edit film -->
         <div v-if="showFilmEditSection">
-            <p>{{filmDetail.title}}</p>
+            <h2>Edit <b>{{filmDetail.title}}</b></h2>
             <div class="form-group">
                 <label for="title">Title: </label>
                 <input type="text" id="title" v-model="filmDetail.title" placeholder="title" class="form-control" />
-                <ValidationMessage For="() => filmDetail.title" />
             </div>
 
             <div class="form-group">
                 <label for="image">Image (Url): </label>
                 <input type="url" id="image" v-model="filmDetail.image" placeholder="image(url)" class="form-control" />
-                <ValidationMessage For="() => filmDetail.image" />
             </div>
 
             <div class="form-group">
                 <label for="releaseYear">Release Year: </label>
                 <input type="number" id="releaseYear" v-model="filmDetail.releaseYear" placeholder="Release Year" class="form-control" />
-                <ValidationMessage For="() => filmDetail.releaseYear" />
             </div>
 
             <div class="form-group">
                 <label for="director">Director: </label>
-                <select v-for="">
-                    <option></option>
+                <select v-model="filmDetail.director.id" class="form-select">
+                    <option v-for="director in directors" v-bind:value="director.id">{{director.name}}</option>
                 </select>
-                <input type="number" id="releaseYear" v-model="filmDetail.releaseYear" placeholder="Release Year" class="form-control" />
-                <ValidationMessage For="() => filmDetail.releaseYear" />
             </div>
+
+            <div class="form-group">
+                <label for="genre">Genre: </label>
+                <select v-model="filmDetail.genre.id" class="form-select">
+                    <option v-for="genre in genres" v-bind:value="genre.id">{{genre.name}}</option>
+                </select>
+            </div>
+
+            <button type="button" class="btn btn-secondary" v-on:click="GetFilmDetails(filmDetail)">Cancel</button>
+            <button type="button" class="btn btn-primary" v-on:click="saveEditFilm(filmDetail)">Save</button>
         </div>
     </div>
 </div>
@@ -98,7 +107,7 @@
             directors: null,
             genres: null,
             isLoading: true,
-            filmDetail: null
+            filmDetail: null,
         },
         created: function () {
             this.showFilms();
@@ -139,7 +148,6 @@
             GetGenres: async function () {
                 this.showErrorSection = false;
                 let self = this;
-
                 await axios.get(`${baseUrl}genres`)
                     .then((response) => {
                     self.genres = response.data;
@@ -180,13 +188,38 @@
                 this.isLoading = true;
             },
             showEditForm: async function() {
-                //await this.GetFilms();
+                await this.GetDirectors();
+                await this.GetGenres();
                 this.showAllFilmsSection= false;
                 this.showFilmDetailSection= false;
                 this.showFilmEditSection = true;
             },
-            editFilm: async function (filmToEdit){
+            saveEditFilm: async function (filmDetail){
                 this.isLoading = true;
+
+                var editedFilm = {
+                    id: filmDetail.id,
+                    title: filmDetail.title,
+                    image: filmDetail.image,
+                    releaseYear: filmDetail.releaseYear,
+                    directorId: filmDetail.director.id,
+                    genreId: filmDetail.genre.id
+                }
+
+                await axios.put(`${baseUrl}films`, editedFilm)
+                    .then((response) => {
+                        this.showFilms();
+                    })
+                    .catch((e) => {
+                        this.showErrorSection = true;
+                        this.errorMessage = e.message;
+                    })
+                    .finally(() => {
+                        this.isLoading = false;
+                    });
+                this.showAllFilmsSection = true;
+                this.showFilmDetailSection = false;
+                this.showFilmEditSection = false;
             },
             deleteFilm: async function (filmToDelete) {
                 this.isLoading = true;
