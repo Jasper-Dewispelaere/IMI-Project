@@ -14,7 +14,7 @@
     <div v-else>
         <!-- All films -->
         <div v-if="showAllFilmsSection">
-            @*<button class="btn btn-primary" style="position: absolute;top: 0;right: 0; margin:10px;" v-on:click="showAddForm">Add Film</button>*@
+            <button class="btn btn-primary" style="position: absolute;top: 0;right: 0; margin:10px;" v-on:click="showAddForm">Add Film</button>
             <div class="row">
                 <div class="card mb-3" style="max-width: 350px; margin:5px;" v-for="film in films">
                     <div class="row no-gutters">
@@ -33,6 +33,41 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <!-- Add film -->
+        <div v-if="showFilmAddSection">
+            <h2>Add new film</h2>
+            <div class="form-group">
+                <label for="title">Title: </label>
+                <input type="text" id="title" v-model="newFilm.title" placeholder="title" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="image">Image (Url): </label>
+                <input type="url" id="image" v-model="newFilm.image" placeholder="image(url)" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="releaseYear">Release Year: </label>
+                <input type="number" id="releaseYear" v-model="newFilm.releaseYear" placeholder="Release Year" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label for="director">Director: </label>
+                <select v-model="newFilm.directorId" class="form-select">
+                    <option v-for="director in directors" v-bind:value="director.id">{{director.name}}</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="genre">Genre: </label>
+                <select v-model="newFilm.genreId" class="form-select">
+                    <option v-for="genre in genres" v-bind:value="genre.id">{{genre.name}}</option>
+                </select>
+            </div>
+
+            <button type="button" class="btn btn-secondary" v-on:click="showFilms">Cancel</button>
+            <button type="button" class="btn btn-primary" v-on:click="saveNewFilm(newFilm)">Save</button>
         </div>
         <!-- Film detail -->
         <div v-if="showFilmDetailSection">
@@ -102,12 +137,21 @@
         data: { 
             showAllFilmsSection: false,
             showFilmDetailSection: false,
+            showFilmAddSection: false,
             showFilmEditSection: false,
             films: null,
             directors: null,
             genres: null,
             isLoading: true,
             filmDetail: null,
+            newFilm: {
+                id: "",
+                title: "",
+                image: "",
+                releaseYear: 0,
+                directorId: "",
+                genreId: "",
+            },
         },
         created: function () {
             this.showFilms();
@@ -166,6 +210,8 @@
                     this.showAllFilmsSection= true;
                     this.showFilmDetailSection= false;
                     this.showFilmEditSection = false;
+                    this.showFilmAddSection = false;
+
             },
             GetFilmDetails: async function(film) {
                     this.isLoading = true;
@@ -183,9 +229,48 @@
                     this.showAllFilmsSection = false;
                     this.showFilmDetailSection = true;
                     this.showFilmEditSection = false;
+                    this.showFilmAddSection = false;
             },
-            showAddForm: async function(film) {
+            createGUID: function() {
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+                    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            },
+            showAddForm: async function() {
+                await this.GetDirectors();
+                await this.GetGenres();
+                this.showAllFilmsSection= false;
+                this.showFilmDetailSection= false;
+                this.showFilmEditSection = false;
+                this.showFilmAddSection = true;
+            },
+            saveNewFilm: async function(newFilm) {
                 this.isLoading = true;
+                
+                var newGuid= this.createGUID();
+                console.log(newGuid);
+                var createdFilm = {
+                    id: newGuid,
+                    title: newFilm.title,
+                    image: newFilm.image,
+                    releaseYear: newFilm.releaseYear,
+                    directorId: newFilm.directorId,
+                    genreId: newFilm.genreId
+                }
+                console.log(createdFilm);
+
+                await axios.post(`${baseUrl}films`, createdFilm)
+                    .then((response) => {
+                        this.showFilms();
+                    })
+                    .catch((e) => {
+                        this.showErrorSection = true;
+                        this.errorMessage = e.message;
+                    })
+                    .finally(() => {
+                        this.isLoading = false;
+                    });
             },
             showEditForm: async function() {
                 await this.GetDirectors();
@@ -193,6 +278,7 @@
                 this.showAllFilmsSection= false;
                 this.showFilmDetailSection= false;
                 this.showFilmEditSection = true;
+                this.showFilmAddSection = false;
             },
             saveEditFilm: async function (filmDetail){
                 this.isLoading = true;
@@ -220,6 +306,7 @@
                 this.showAllFilmsSection = true;
                 this.showFilmDetailSection = false;
                 this.showFilmEditSection = false;
+                this.showFilmAddSection = false;
             },
             deleteFilm: async function (filmToDelete) {
                 this.isLoading = true;
@@ -242,6 +329,7 @@
                 this.showAllFilmsSection = true;
                 this.showFilmDetailSection = false;
                 this.showFilmEditSection = false;
+                this.showFilmAddSection = false;
             }
         },
     });
