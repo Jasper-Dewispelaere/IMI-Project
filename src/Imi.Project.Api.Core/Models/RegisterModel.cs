@@ -15,6 +15,8 @@ namespace Imi.Project.Api.Core.Models
         [Required]
         public string Password { get; set; }
         [Required]
-        public DateTime Birthday { get; set; }
+        public DateTime DateOfBirth { get; set; }
+        [Required]
+        public bool HasApprovedTermsAndConditions { get; set; }
     }
 }

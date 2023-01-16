@@ -60,7 +60,8 @@ namespace Imi.Project.Api.Core.Services
             {
                 UserName = registerModel.Email,
                 Email = registerModel.Email,
-                DateOfBirth = registerModel.Birthday,
+                DateOfBirth = registerModel.DateOfBirth,
+                HasApprovedTermsAndConditions = registerModel.HasApprovedTermsAndConditions
             };
             var result = await _userManager.CreateAsync(applicationUser, registerModel.Password);
             if (result.Succeeded == false)
