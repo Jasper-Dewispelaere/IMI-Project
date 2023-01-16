@@ -1,5 +1,7 @@
 ﻿using Imi.Project.Api.Core.DTOs.Accounts;
 using Imi.Project.Api.Core.Entities;
+using Imi.Project.Api.Core.Models;
+using Imi.Project.Api.Core.Repositories.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,96 +16,92 @@ namespace Imi.Project.Api.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IConfiguration _configuration;
+        private readonly IUserService _userService;
 
-        public AccountsController(UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager,
-        IConfiguration configuration)
+        public AccountsController(IUserService userService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _configuration = configuration;
+            _userService = userService;
         }
 
         [AllowAnonymous]
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterUserRequestDto registration)
+        public async Task<IActionResult> Register(RegisterUserRequestDto registrationDto)
         {
-            if (!ModelState.IsValid)
+            var registerModel = new RegisterModel
             {
-                return BadRequest(ModelState);
-            }
-
-            ApplicationUser newUser = new ApplicationUser
-            {
-                UserName = registration.Username,
-                Email = registration.Email,
-                DateOfBirth = registration.DateOfBirth,
-                HasApprovedTermsAndConditions = registration.HasApprovedTermsAndConditions
+                Email = registrationDto.Email,
+                DateOfBirth = registrationDto.DateOfBirth,
+                Password = registrationDto.Password
             };
-            IdentityResult result = await _userManager.CreateAsync(newUser, registration.Password);
-            if (!result.Succeeded)
-            {
-                foreach (var error in result.Errors)
-                {
-                    ModelState.AddModelError(error.Code, error.Description);
-                }
-                return BadRequest(ModelState);
-            }
 
-            newUser = await _userManager.FindByEmailAsync(registration.Email);
-            await _userManager.AddClaimAsync(newUser,
-                new Claim("registration-date", DateTime.UtcNow.ToString("yy-MM-dd")));
-            await _userManager.AddClaimAsync(newUser, new Claim("User", registration.Email));
+            var result = await _userService.RegisterAsync(registerModel);
+
+            if (result.IsSuccess == false)
+            {
+                return BadRequest(result.Messages);
+            }
 
             return Ok();
         }
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<ActionResult> Login([FromBody] LoginUserRequestDto login)
+        public async Task<IActionResult> Login(LoginUserRequestDto loginDto)
         {
-            var result = await _signInManager.PasswordSignInAsync(login.Email, login.Password, isPersistent: false, lockoutOnFailure: false);
-            if (!result.Succeeded)
+            var loginModel = new LoginModel
             {
-                return Unauthorized();
-            }
-            var applicationUser = await _userManager.FindByEmailAsync(login.Email);
-            JwtSecurityToken token = await GenerateTokenAsync(applicationUser); 
-            string serializedToken = new JwtSecurityTokenHandler().WriteToken(token); 
-            return Ok(new LoginUserResponseDto()
+                Email = loginDto.Email,
+                Password = loginDto.Password
+            };
+
+            var result = await _userService.LoginAsync(loginModel);
+
+            if (result.IsSuccess == false)
             {
-                Token = serializedToken
-            });
-        }
-
-        private async Task<JwtSecurityToken> GenerateTokenAsync(ApplicationUser user)
-        {
-            var claims = new List<Claim>(); 
-            var userClaims = await _userManager.GetClaimsAsync(user);
-
-            claims.AddRange(userClaims);
-
-            var roleClaims = await _userManager.GetRolesAsync(user); 
-            foreach (var roleClaim in roleClaims) 
-            { 
-                claims.Add(new Claim(ClaimTypes.Role, roleClaim)); 
+                return BadRequest(result.Messages);
             }
 
-            var expirationDays = _configuration.GetValue<int>("JWTConfiguration:TokenExpirationDays"); 
-            var siginingKey = Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JWTConfiguration:SigningKey")); 
-            var token = new JwtSecurityToken
-            (
-                issuer: _configuration.GetValue<string>("JWTConfiguration:Issuer"), 
-                audience: _configuration.GetValue<string>("JWTConfiguration:Audience"), 
-                claims: claims, 
-                expires: DateTime.UtcNow.Add(TimeSpan.FromDays(expirationDays)), 
-                notBefore: DateTime.UtcNow, 
-                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(siginingKey), SecurityAlgorithms.HmacSha256)
-            );
-            return token;
+            return Ok(new TokenDto { BearerToken = result.Token });
+
+            //var result = await _signInManager.PasswordSignInAsync(login.Email, login.Password, isPersistent: false, lockoutOnFailure: false);
+            //if (!result.Succeeded)
+            //{
+            //    return Unauthorized();
+            //}
+            //var applicationUser = await _userManager.FindByEmailAsync(login.Email);
+            //JwtSecurityToken token = await GenerateTokenAsync(applicationUser); 
+            //string serializedToken = new JwtSecurityTokenHandler().WriteToken(token); 
+            //return Ok(new LoginUserResponseDto()
+            //{
+            //    Token = serializedToken
+            //});
         }
+
+        //private async Task<JwtSecurityToken> GenerateTokenAsync(ApplicationUser user)
+        //{
+        //    var claims = new List<Claim>(); 
+        //    var userClaims = await _userManager.GetClaimsAsync(user);
+
+        //    claims.AddRange(userClaims);
+
+        //    var roleClaims = await _userManager.GetRolesAsync(user); 
+        //    foreach (var roleClaim in roleClaims) 
+        //    { 
+        //        claims.Add(new Claim(ClaimTypes.Role, roleClaim)); 
+        //    }
+
+        //    var expirationDays = _configuration.GetValue<int>("JWTConfiguration:TokenExpirationDays"); 
+        //    var siginingKey = Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JWTConfiguration:SigningKey")); 
+        //    var token = new JwtSecurityToken
+        //    (
+        //        issuer: _configuration.GetValue<string>("JWTConfiguration:Issuer"), 
+        //        audience: _configuration.GetValue<string>("JWTConfiguration:Audience"), 
+        //        claims: claims, 
+        //        expires: DateTime.UtcNow.Add(TimeSpan.FromDays(expirationDays)), 
+        //        notBefore: DateTime.UtcNow, 
+        //        signingCredentials: new SigningCredentials(new SymmetricSecurityKey(siginingKey), SecurityAlgorithms.HmacSha256)
+        //    );
+        //    return token;
+        //}
     }
 }
