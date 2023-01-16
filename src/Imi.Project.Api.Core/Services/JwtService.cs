@@ -25,6 +25,7 @@ namespace Imi.Project.Api.Core.Services
             claims.AddRange(userClaims);
             var expirationDays = int.Parse(_configuration["JWTConfiguration:TokenExpirationDays"]);
             var signinKey = _configuration["JWTConfiguration:SigninKey"];
+            var siginingKey = Encoding.UTF8.GetBytes(_configuration.GetValue<string>("JWTConfiguration:SigningKey"));
             var token = new JwtSecurityToken
             (
                 issuer: _configuration["JWTConfiguration:Issuer"],
@@ -32,8 +33,7 @@ namespace Imi.Project.Api.Core.Services
                 claims: claims,
                 expires: DateTime.UtcNow.Add(TimeSpan.FromDays(expirationDays)),
                 notBefore: DateTime.UtcNow,
-                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(signinKey))
-                , SecurityAlgorithms.HmacSha256)
+                signingCredentials: new SigningCredentials(new SymmetricSecurityKey(siginingKey), SecurityAlgorithms.HmacSha256)
             );
             return token;
         }
