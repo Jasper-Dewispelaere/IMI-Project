@@ -63,20 +63,28 @@ namespace Imi.Project.Api.Controllers
 
         [AllowAnonymous]
         [HttpPost("login")]
-        public async Task<ActionResult> Login([FromBody] LoginUserRequestDto login)
+        public async Task<IActionResult> Login(LoginUserRequestDto loginDto)
         {
-            var result = await _signInManager.PasswordSignInAsync(login.Email, login.Password, isPersistent: false, lockoutOnFailure: false);
-            if (!result.Succeeded)
+            var loginModel = new LoginModel
             {
-                return Unauthorized();
-            }
-            var applicationUser = await _userManager.FindByEmailAsync(login.Email);
-            JwtSecurityToken token = await GenerateTokenAsync(applicationUser); 
-            string serializedToken = new JwtSecurityTokenHandler().WriteToken(token); 
-            return Ok(new LoginUserResponseDto()
-            {
-                Token = serializedToken
-            });
+                Email = loginDto.Email,
+                Password = loginDto.Password
+            };
+
+            var result = await _userManager.login
+
+            //var result = await _signInManager.PasswordSignInAsync(login.Email, login.Password, isPersistent: false, lockoutOnFailure: false);
+            //if (!result.Succeeded)
+            //{
+            //    return Unauthorized();
+            //}
+            //var applicationUser = await _userManager.FindByEmailAsync(login.Email);
+            //JwtSecurityToken token = await GenerateTokenAsync(applicationUser); 
+            //string serializedToken = new JwtSecurityTokenHandler().WriteToken(token); 
+            //return Ok(new LoginUserResponseDto()
+            //{
+            //    Token = serializedToken
+            //});
         }
 
         private async Task<JwtSecurityToken> GenerateTokenAsync(ApplicationUser user)
