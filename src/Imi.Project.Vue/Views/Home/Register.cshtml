@@ -1,0 +1,126 @@
+﻿@{
+    ViewData["Title"] = "Register";
+}
+@*Zal altijd op poort 7001 draaien*@
+
+<div id="app">
+    <div v-if="showRegister">
+        <h1>Register</h1>
+
+        <div class="form-group">
+            <label for="email">Email: </label>
+            <input type="email" id="email" v-model="newUser.title" placeholder="email" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="username">Username: </label>
+            <input type="text" id="username" v-model="newUser.username" placeholder="username" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="password">Password: </label>
+            <input type="password" id="password" v-model="newUser.password" placeholder="password" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="confirmPassword">Confirm Password: </label>
+            <input type="password" id="confirmPassword" v-model="newUser.confirmPassword" placeholder="confirm password" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="dateOfBirth">Date of Birth: </label>
+            <input type="date" id="dateOfBirth" v-model="newUser.dateOfBirth" placeholder="date of birth" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="hasApprovedTermsAndConditions">Approve Terms and Conditions: </label>
+            <input type="checkbox" id="hasApprovedTermsAndConditions" v-model="newUser.hasApprovedTermsAndConditions"/>
+        </div>
+        <button type="button" class="btn btn-primary" v-on:click="Register(newUser)">Register</button>
+        <button type="button" class="btn btn-secondary" v-on:click="ShowLogin">I Already have an account</button>
+        <div v-if="registerSuccesful">
+            <h2 style="background-color:green">Registration succesful</h2>
+        </div>
+    </div>
+    <div v-else>
+        <h1>Log in</h1>
+
+        <div class="form-group">
+            <label for="email">Email: </label>
+            <input type="email" id="email" v-model="user.title" placeholder="email" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="password">Password: </label>
+            <input type="password" id="password" v-model="user.password" placeholder="password" class="form-control" />
+        </div>
+        <button type="button" class="btn btn-primary" v-on:click="Login(user)">Login</button>
+        <button type="button" class="btn btn-secondary" v-on:click="ShowRegister">I don't have an account yet</button>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                showRegister: true,
+                showLogin: false,
+                userIsLoggedIn: false,
+                registerSuccesful: false,
+                errorMessage: null,
+                newUser: {
+                    email: "",
+                    username: "",
+                    password: "",
+                    confirmPassword: "",
+                    dateOfBirth: "",
+                    hasApprovedTermsAndConditions: false
+                },
+                user: {
+                    email: "",
+                    password: ""
+                }
+            },
+            methods: {
+                Register: async function(registerUser) {
+                    await axios.post(`${baseUrl}Accounts/register`, this.registerUser)
+                        .then((response) => {
+                            this.registerSuccesful = true;
+                            this.errorMessage = null;
+                        })
+                        .catch((e) => {
+                            this.errorMessage = "Registration failed!";
+                        })
+                        .finally(() => {
+                            this.newuser.email = "";
+                            this.newuser.username = "";
+                            this.newuser.password = "";
+                            this.newuser.confirmPassword = "";
+                            this.newuser.dateOfBirth = "";
+                            this.newuser.hasApprovedTermsAndConditions = false;
+                        });
+                },
+                ShowLogin: function(){
+                    this.showRegister= false;
+                    this.showLogin= true;
+                },
+                Login: async function(loginUser) {
+                    await axios.post(`${baseUrl}Accounts/login`, this.loginUser)
+                    .then((response) => {
+                        sessionStorage.setItem("token", response.data.bearerToken);
+                        this.userIsLoggedIn = true;
+                        this.userModel.name = readUserNameFromToken();
+                        this.errorMessage = null;
+                    })
+                    .catch((e) => {
+                        this.errorMessage = "Login failed!";
+                        this.userIsLoggedIn = false;
+                    })
+                    .finally(() => {
+                        this.user.email = "";
+                        this.user.password = "";
+                    });
+                },
+                ShowRegister: function () {
+                    this.showRegister = true;
+                    this.showLogin = false;
+                }
+            }
+        });
+    </script>
+}
