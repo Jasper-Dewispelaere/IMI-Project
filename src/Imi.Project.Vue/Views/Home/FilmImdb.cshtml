@@ -1,0 +1,75 @@
+﻿@{
+    ViewData["Title"] = "Random Film";
+}
+
+<div id="app">
+    <div class="form-group">
+        <label for="selectedFilm">Choose a Film: </label>
+        <select v-model="selectedFilm" name="selectedFilm" class="form-select">
+            <option v-for="film in searchableFilms" v-bind:value="film.imdbId">{{film.name}}</option>
+        </select>
+    </div>
+    <button class="btn btn-primary" style="margin-bottom:15px;" v-on:click="GetFilmDetail(selectedFilm)">Get Details</button>
+
+    <div v-if="showDetails">
+        <div class="row">
+            <div class="col-md-4 card" style="height: 525px">
+                <img class="card-img" style="width: auto; height: auto; padding: 5px;" v-bind:src="filmDetail.image" alt="filmDetail.image" />
+            </div>
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="card-title">{{filmDetail.title}}</h2>
+                        <p><b>Description:</b> {{filmDetail.description}}</p>
+                        <p><b>Actors:</b> {{filmDetail.actors[0].name}}, {{filmDetail.actors[1].name}}, {{filmDetail.actors[2].name}}</p>
+                        <p><b>Release Year:</b> {{filmDetail.release_year}}</p>
+                        <p><b>Runtime:</b> {{filmDetail.runtime}}</p>
+                        <p><b>Genre:</b> {{filmDetail.genres[0]}}</p>
+                        <p class="mb-1"><b>Director:</b> {{filmDetail.director_names[0]}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                showDetails:false,
+                selectedFilm: null,
+                filmDetail: null,
+                searchableFilms: [
+                    { name: "Baby Driver", imdbId: "tt3890160"},
+                    { name: "King Kong", imdbId: "tt0360717" },
+                    { name: "Shrek", imdbId: "tt0126029" },
+                    { name: "Interstellar", imdbId: "tt0816692" },
+                    { name: "The Matrix", imdbId: "tt0133093" },
+                    { name: "Pulp Fiction", imdbId: "tt0110912" },
+                    { name: "Yes Man", imdbId: "tt1068680" }
+                ]
+            },
+            methods:{
+                GetFilmDetail: async function(filmId) {
+                    const options = {
+                        method: 'GET',
+                        headers: {
+                            'X-RapidAPI-Key': '7a0b9ddf8emsha162d97cd355fa4p105834jsnc60b1979444c',
+                            'X-RapidAPI-Host': 'movie-details1.p.rapidapi.com'
+                        }
+                    };
+
+                    var url = `https://movie-details1.p.rapidapi.com/imdb_api/movie?id=${filmId}`;
+
+                    const res = await fetch(url, options);
+                    this.filmDetail = await res.json();
+
+                    this.showDetails = true;
+                    console.log(this.filmDetail); //Dit erin gelaten zo jij ook gemakkelijk kan zien wat de api verstuurd 
+                }
+            }
+        });
+    </script>
+}
